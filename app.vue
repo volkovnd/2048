@@ -47,22 +47,22 @@ const createOnKeyHandler = (createResultFn: () => ItemDashboard) => {
   };
 };
 
-onKeyStroke(
+useKeyDown(
   "ArrowLeft",
   createOnKeyHandler(() => clone(items.value).map((row) => processArrOnMoveLeft(row)))
 );
 
-onKeyStroke(
+useKeyDown(
   "ArrowRight",
   createOnKeyHandler(() => clone(items.value).map((row) => processArrOnMoveRight(row)))
 );
 
-onKeyStroke(
+useKeyDown(
   "ArrowUp",
   createOnKeyHandler(() => rotateArr(rotateArr(items.value).map((row) => processArrOnMoveLeft(row))))
 );
 
-onKeyStroke(
+useKeyDown(
   "ArrowDown",
   createOnKeyHandler(() => rotateArr(rotateArr(items.value).map((row) => processArrOnMoveRight(row))))
 );
