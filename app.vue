@@ -35,53 +35,41 @@ onMounted(() => {
   addRandomItem();
 });
 
-onKeyStroke("ArrowLeft", () => {
-  const itemsCopy = clone(items.value).map((row, index) => {
-    return processArrOnMoveLeft(row);
-  });
+const createOnKeyHandler = (createResultFn: () => ItemDashboard) => {
+  return () => {
+    const result = createResultFn();
 
-  if (!isEqual(itemsCopy, items.value)) {
-    items.value = itemsCopy;
+    if (!isEqual(result, items.value)) {
+      items.value = result;
 
-    addRandomItem();
-  }
-});
-
-onKeyStroke("ArrowRight", () => {
-  const itemsCopy = clone(items.value).map((row, index) => {
-    return processArrOnMoveLeft(row.reverse()).reverse();
-  });
-
-  if (!isEqual(itemsCopy, items.value)) {
-    items.value = itemsCopy;
-
-    addRandomItem();
-  }
-});
+      addRandomItem();
+    }
+  };
+};
 
 const rotateArr = (input: ItemDashboard) => {
   return Array.from({ length: 4 }, (_v, y) => Array.from({ length: 4 }, (_v, x) => input[x][y]));
 };
 
-onKeyStroke("ArrowUp", () => {
-  const result = rotateArr(rotateArr(items.value).map((row) => processArrOnMoveLeft(row)));
+onKeyStroke(
+  "ArrowLeft",
+  createOnKeyHandler(() => clone(items.value).map((row) => processArrOnMove(row)))
+);
 
-  if (!isEqual(items.value, result)) {
-    items.value = result;
+onKeyStroke(
+  "ArrowRight",
+  createOnKeyHandler(() => clone(items.value).map((row) => processArrOnMove(row, true)))
+);
 
-    addRandomItem();
-  }
-});
+onKeyStroke(
+  "ArrowUp",
+  createOnKeyHandler(() => rotateArr(rotateArr(items.value).map((row) => processArrOnMove(row))))
+);
 
-onKeyStroke("ArrowDown", () => {
-  const result = rotateArr(rotateArr(items.value).map((row) => processArrOnMoveLeft(row.reverse()).reverse()));
-
-  if (!isEqual(result, items.value)) {
-    items.value = result;
-
-    addRandomItem();
-  }
-});
+onKeyStroke(
+  "ArrowDown",
+  createOnKeyHandler(() => rotateArr(rotateArr(items.value).map((row) => processArrOnMove(row, true))))
+);
 </script>
 
 <style>
