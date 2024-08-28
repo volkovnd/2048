@@ -55,7 +55,7 @@ const processArrOnMoveRight = (input: ItemRow) => {
     }
   }
 
-  newRow = Array.from({ length: 4 - newRow.length }, (): Item => null).concat(newRow);
+  newRow = createArrOfNulls(4 - newRow.length).concat(newRow);
 
   return newRow;
 };
@@ -71,7 +71,7 @@ const processArrOnMoveLeft = (input: ItemRow) => {
     }
   }
 
-  newRow = newRow.concat(Array.from({ length: 4 - newRow.length }, (): Item => null));
+  newRow = newRow.concat(createArrOfNulls(4 - newRow.length));
 
   return newRow;
 };
