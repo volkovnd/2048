@@ -11,12 +11,12 @@
 </template>
 
 <script setup lang="ts">
-import type { Item, ItemDashboard, ItemRow } from "@/types";
+import type { ItemDashboard, ItemRow } from "@/types";
 
-const items = ref<ItemDashboard>(Array.from({ length: 4 }, () => Array.from({ length: 4 }, (_v, i) => null)));
+const items = ref<ItemDashboard>(Array.from({ length: 4 }, () => Array(4).fill(null)));
 
-const getEmptyItems = () =>
-  items.value.reduce<Array<{ x: number; y: number }>>((acc, row, y) => {
+const addRandomItem = () => {
+  const emptyItems = items.value.reduce<Array<{ x: number; y: number }>>((acc, row, y) => {
     row.forEach((item, x) => {
       if (item === null) {
         acc.push({ x, y });
@@ -25,9 +25,6 @@ const getEmptyItems = () =>
 
     return acc;
   }, []);
-
-const addRandomItem = () => {
-  const emptyItems = getEmptyItems();
 
   const randIndex = randomInt(emptyItems.length);
 
