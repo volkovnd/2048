@@ -11,9 +11,7 @@
 </template>
 
 <script setup lang="ts">
-type Item = number | null;
-type ItemRow = Item[];
-type ItemDashboard = ItemRow[];
+import type { Item, ItemDashboard, ItemRow } from "@/types";
 
 const items = ref<ItemDashboard>(Array.from({ length: 4 }, () => Array.from({ length: 4 }, (_v, i) => null)));
 
@@ -40,66 +38,26 @@ onMounted(() => {
   addRandomItem();
 });
 
-const removeSpaces = <T>(input: Array<T>): Array<T> => {
-  return input.filter((input) => input !== null);
-};
-
-const processArrOnMoveRight = (input: ItemRow) => {
-  let newRow: ItemRow = removeSpaces(input);
-
-  for (let i = newRow.length - 1; i > 0; i--) {
-    if (newRow[i] !== null && newRow[i] === newRow[i - 1]) {
-      newRow[i - 1] = null;
-      // @ts-ignore
-      newRow[i] = newRow[i] * 2;
-    }
-  }
-
-  newRow = createArrOfNulls(4 - newRow.length).concat(newRow);
-
-  return newRow;
-};
-
-const processArrOnMoveLeft = (input: ItemRow) => {
-  let newRow: ItemRow = removeSpaces(input);
-
-  for (let i = 0; i < newRow.length - 1; i++) {
-    if (newRow[i] !== null && newRow[i] === newRow[i + 1]) {
-      newRow[i + 1] = null;
-      // @ts-ignore
-      newRow[i] = newRow[i] * 2;
-    }
-  }
-
-  newRow = newRow.concat(createArrOfNulls(4 - newRow.length));
-
-  return newRow;
-};
-
 onKeyStroke("ArrowLeft", () => {
-  const oldArray = clone(items.value);
-
-  items.value.forEach((row, index) => {
-    const result = processArrOnMoveLeft(row);
-
-    items.value[index] = result;
+  const itemsCopy = clone(items.value).map((row, index) => {
+    return processArrOnMoveLeft(row);
   });
 
-  if (!isEqual(oldArray, items.value)) {
+  if (!isEqual(itemsCopy, items.value)) {
+    items.value = itemsCopy;
+
     addRandomItem();
   }
 });
 
 onKeyStroke("ArrowRight", () => {
-  const oldArray = clone(items.value);
-
-  items.value.forEach((row, index) => {
-    const result = processArrOnMoveRight(row);
-
-    items.value[index] = result;
+  const itemsCopy = clone(items.value).map((row, index) => {
+    return processArrOnMoveLeft(row.reverse()).reverse();
   });
 
-  if (!isEqual(oldArray, items.value)) {
+  if (!isEqual(itemsCopy, items.value)) {
+    items.value = itemsCopy;
+
     addRandomItem();
   }
 });
@@ -136,7 +94,7 @@ onKeyStroke("ArrowDown", () => {
       newRow.push(row[i]);
     });
 
-    newRow = processArrOnMoveRight(newRow);
+    newRow = processArrOnMoveLeft(newRow.reverse()).reverse();
 
     for (let j = 0; j < items.value.length; j++) {
       items.value[j][i] = newRow[j];
