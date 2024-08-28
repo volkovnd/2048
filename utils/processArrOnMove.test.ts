@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { processArrOnMoveLeft } from "./processArrOnMoveLeft";
+import { processArrOnMoveLeft } from "./processArrOnMove";
 
 describe("processArrOnMoveLeft", () => {
   it("test arr", () => {
