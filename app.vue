@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ItemDashboard, ItemRow } from "@/types";
+import type { ItemDashboard } from "@/types";
 
 const items = ref<ItemDashboard>(Array.from({ length: 4 }, () => Array(4).fill(null)));
 
@@ -45,10 +45,6 @@ const createOnKeyHandler = (createResultFn: () => ItemDashboard) => {
       addRandomItem();
     }
   };
-};
-
-const rotateArr = (input: ItemDashboard) => {
-  return Array.from({ length: 4 }, (_v, y) => Array.from({ length: 4 }, (_v, x) => input[x][y]));
 };
 
 onKeyStroke(
