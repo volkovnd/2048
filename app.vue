@@ -1,4 +1,5 @@
 <template>
+  <h3 style="text-align: center; font-size: 40px" v-if="isFinished">Игра закончена!</h3>
   <div class="wrapper">
     <div class="board">
       <template v-for="(row, x) in items" :key="x">
@@ -35,6 +36,12 @@ onMounted(() => {
   addRandomItem();
 });
 
+const isAllowedAction = (action: () => ItemDashboard) => {
+  const result = action();
+
+  return !isEqual(result, items.value);
+};
+
 const createOnKeyHandler = (createResultFn: () => ItemDashboard) => {
   return () => {
     const result = createResultFn();
@@ -47,25 +54,21 @@ const createOnKeyHandler = (createResultFn: () => ItemDashboard) => {
   };
 };
 
-useKeyDown(
-  "ArrowLeft",
-  createOnKeyHandler(() => clone(items.value).map((row) => processArrOnMoveLeft(row)))
-);
+const onLeft = () => clone(items.value).map((row) => processArrOnMoveLeft(row));
+const onRight = () => clone(items.value).map((row) => processArrOnMoveRight(row));
+const onUp = () => rotateArr(rotateArr(items.value).map((row) => processArrOnMoveLeft(row)));
+const onDown = () => rotateArr(rotateArr(items.value).map((row) => processArrOnMoveRight(row)));
 
-useKeyDown(
-  "ArrowRight",
-  createOnKeyHandler(() => clone(items.value).map((row) => processArrOnMoveRight(row)))
-);
+useKeyDown("ArrowLeft", createOnKeyHandler(onLeft));
+useKeyDown("ArrowRight", createOnKeyHandler(onRight));
+useKeyDown("ArrowUp", createOnKeyHandler(onUp));
+useKeyDown("ArrowDown", createOnKeyHandler(onDown));
 
-useKeyDown(
-  "ArrowUp",
-  createOnKeyHandler(() => rotateArr(rotateArr(items.value).map((row) => processArrOnMoveLeft(row))))
-);
+const isFinished = ref(false);
 
-useKeyDown(
-  "ArrowDown",
-  createOnKeyHandler(() => rotateArr(rotateArr(items.value).map((row) => processArrOnMoveRight(row))))
-);
+watch(items, () => {
+  isFinished.value = [onLeft, onRight, onUp, onDown].every((fn) => !isAllowedAction(fn));
+});
 </script>
 
 <style>
