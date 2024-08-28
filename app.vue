@@ -11,7 +11,11 @@
 </template>
 
 <script setup lang="ts">
-const items = ref<Array<number | null>[]>(Array.from({ length: 4 }, () => Array.from({ length: 4 }, (_v, i) => null)));
+type Item = number | null;
+type ItemRow = Item[];
+type ItemDashboard = ItemRow[];
+
+const items = ref<ItemDashboard>(Array.from({ length: 4 }, () => Array.from({ length: 4 }, (_v, i) => null)));
 
 const getEmptyItems = () =>
   items.value.reduce<Array<{ x: number; y: number }>>((acc, row, y) => {
@@ -39,8 +43,9 @@ onMounted(() => {
 const removeSpaces = <T>(input: Array<T>): Array<T> => {
   return input.filter((input) => input !== null);
 };
-const processArrOnMoveRight = (input: Array<number | null>) => {
-  let newRow: Array<number | null> = removeSpaces(input);
+
+const processArrOnMoveRight = (input: ItemRow) => {
+  let newRow: ItemRow = removeSpaces(input);
 
   for (let i = newRow.length - 1; i > 0; i--) {
     if (newRow[i] !== null && newRow[i] === newRow[i - 1]) {
@@ -50,13 +55,13 @@ const processArrOnMoveRight = (input: Array<number | null>) => {
     }
   }
 
-  newRow = Array.from({ length: 4 - newRow.length }, (): number | null => null).concat(newRow);
+  newRow = Array.from({ length: 4 - newRow.length }, (): Item => null).concat(newRow);
 
   return newRow;
 };
 
-const processArrOnMoveLeft = (input: Array<number | null>) => {
-  let newRow: Array<number | null> = removeSpaces(input);
+const processArrOnMoveLeft = (input: ItemRow) => {
+  let newRow: ItemRow = removeSpaces(input);
 
   for (let i = 0; i < newRow.length - 1; i++) {
     if (newRow[i] !== null && newRow[i] === newRow[i + 1]) {
@@ -66,7 +71,7 @@ const processArrOnMoveLeft = (input: Array<number | null>) => {
     }
   }
 
-  newRow = newRow.concat(Array.from({ length: 4 - newRow.length }, (): number | null => null));
+  newRow = newRow.concat(Array.from({ length: 4 - newRow.length }, (): Item => null));
 
   return newRow;
 };
@@ -103,7 +108,7 @@ onKeyStroke("ArrowUp", () => {
   const oldArray = clone(items.value);
 
   for (let i = 0; i < 4; i++) {
-    let newRow: Array<number | null> = [];
+    let newRow: ItemRow = [];
 
     items.value.forEach((row) => {
       newRow.push(row[i]);
@@ -125,7 +130,7 @@ onKeyStroke("ArrowDown", () => {
   const oldArray = clone(items.value);
 
   for (let i = 0; i < 4; i++) {
-    let newRow: Array<number | null> = [];
+    let newRow: ItemRow = [];
 
     items.value.forEach((row, index) => {
       newRow.push(row[i]);
