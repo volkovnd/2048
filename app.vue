@@ -49,22 +49,22 @@ const createOnKeyHandler = (createResultFn: () => ItemDashboard) => {
 
 onKeyStroke(
   "ArrowLeft",
-  createOnKeyHandler(() => clone(items.value).map((row) => processArrOnMove(row)))
+  createOnKeyHandler(() => clone(items.value).map((row) => processArrOnMoveLeft(row)))
 );
 
 onKeyStroke(
   "ArrowRight",
-  createOnKeyHandler(() => clone(items.value).map((row) => processArrOnMove(row, true)))
+  createOnKeyHandler(() => clone(items.value).map((row) => processArrOnMoveRight(row)))
 );
 
 onKeyStroke(
   "ArrowUp",
-  createOnKeyHandler(() => rotateArr(rotateArr(items.value).map((row) => processArrOnMove(row))))
+  createOnKeyHandler(() => rotateArr(rotateArr(items.value).map((row) => processArrOnMoveLeft(row))))
 );
 
 onKeyStroke(
   "ArrowDown",
-  createOnKeyHandler(() => rotateArr(rotateArr(items.value).map((row) => processArrOnMove(row, true))))
+  createOnKeyHandler(() => rotateArr(rotateArr(items.value).map((row) => processArrOnMoveRight(row))))
 );
 </script>
 
