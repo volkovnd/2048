@@ -5,9 +5,9 @@ export const processArrOnMoveLeft = (input: ItemRow) => {
     return input.filter((input) => input !== null);
   };
 
-  let newRow: ItemRow = removeSpaces(clone(input));
+  let newRow = removeSpaces(input);
 
-  for (let i = 0; i < newRow.length - 1; i++) {
+  for (let i = 0; i < newRow.length; i++) {
     const current = newRow[i];
     const next = newRow[i + 1];
 
