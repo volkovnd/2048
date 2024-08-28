@@ -59,46 +59,26 @@ onKeyStroke("ArrowRight", () => {
   }
 });
 
+const rotateArr = (input: ItemDashboard) => {
+  return Array.from({ length: 4 }, (_v, y) => Array.from({ length: 4 }, (_v, x) => input[x][y]));
+};
+
 onKeyStroke("ArrowUp", () => {
-  const oldArray = clone(items.value);
+  const result = rotateArr(rotateArr(items.value).map((row) => processArrOnMoveLeft(row)));
 
-  for (let i = 0; i < 4; i++) {
-    let newRow: ItemRow = [];
+  if (!isEqual(items.value, result)) {
+    items.value = result;
 
-    items.value.forEach((row) => {
-      newRow.push(row[i]);
-    });
-
-    newRow = processArrOnMoveLeft(newRow);
-
-    for (let j = 0; j < items.value.length; j++) {
-      items.value[j][i] = newRow[j];
-    }
-  }
-
-  if (!isEqual(oldArray, items.value)) {
     addRandomItem();
   }
 });
 
 onKeyStroke("ArrowDown", () => {
-  const oldArray = clone(items.value);
+  const result = rotateArr(rotateArr(items.value).map((row) => processArrOnMoveLeft(row.reverse()).reverse()));
 
-  for (let i = 0; i < 4; i++) {
-    let newRow: ItemRow = [];
+  if (!isEqual(result, items.value)) {
+    items.value = result;
 
-    items.value.forEach((row, index) => {
-      newRow.push(row[i]);
-    });
-
-    newRow = processArrOnMoveLeft(newRow.reverse()).reverse();
-
-    for (let j = 0; j < items.value.length; j++) {
-      items.value[j][i] = newRow[j];
-    }
-  }
-
-  if (!isEqual(oldArray, items.value)) {
     addRandomItem();
   }
 });
