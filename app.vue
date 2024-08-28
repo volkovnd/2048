@@ -1,8 +1,8 @@
 <template>
   <div class="wrapper">
     <div class="board">
-      <template v-for="(row, index) in items" :key="index">
-        <div v-for="(item, index) in row" :key="index" class="board-item">
+      <template v-for="(row, x) in items" :key="x">
+        <div v-for="(item, y) in row" :key="y" class="board-item">
           {{ item }}
         </div>
       </template>
@@ -11,9 +11,7 @@
 </template>
 
 <script setup lang="ts">
-const items = ref<Array<number | null>[]>(
-  Array.from({ length: 4 }, () => Array.from({ length: 4 }, (_v, i) => null))
-);
+const items = ref<Array<number | null>[]>(Array.from({ length: 4 }, () => Array.from({ length: 4 }, (_v, i) => null)));
 
 const getEmptyItems = () =>
   items.value.reduce<Array<{ x: number; y: number }>>((acc, row, y) => {
@@ -29,7 +27,7 @@ const getEmptyItems = () =>
 const addRandomItem = () => {
   const emptyItems = getEmptyItems();
 
-  const randIndex = Math.floor(Math.random() * emptyItems.length);
+  const randIndex = randomInt(emptyItems.length);
 
   items.value[emptyItems[randIndex].y][emptyItems[randIndex].x] = 2;
 };
@@ -38,23 +36,9 @@ onMounted(() => {
   addRandomItem();
 });
 
-const removeSpaces = (input: Array<number | null>) => {
+const removeSpaces = <T>(input: Array<T>): Array<T> => {
   return input.filter((input) => input !== null);
 };
-
-// Клонирование массива
-const cloneArr = <T>(input: T) => {
-  return JSON.parse(JSON.stringify(input)) as T;
-};
-
-// Глубокое сравнение, что массивы одинаковы. Необходимо, чтобы не производить добавление нового элемента
-const isEqualArrs = (
-  arr1: Array<number | null>[],
-  arr2: Array<number | null>[]
-) => {
-  return arr1.every((v, i) => v.every((v2, i2) => v2 === arr2[i][i2]));
-};
-
 const processArrOnMoveRight = (input: Array<number | null>) => {
   let newRow: Array<number | null> = removeSpaces(input);
 
@@ -66,10 +50,7 @@ const processArrOnMoveRight = (input: Array<number | null>) => {
     }
   }
 
-  newRow = Array.from(
-    { length: 4 - newRow.length },
-    (): number | null => null
-  ).concat(newRow);
+  newRow = Array.from({ length: 4 - newRow.length }, (): number | null => null).concat(newRow);
 
   return newRow;
 };
@@ -85,15 +66,13 @@ const processArrOnMoveLeft = (input: Array<number | null>) => {
     }
   }
 
-  newRow = newRow.concat(
-    Array.from({ length: 4 - newRow.length }, (): number | null => null)
-  );
+  newRow = newRow.concat(Array.from({ length: 4 - newRow.length }, (): number | null => null));
 
   return newRow;
 };
 
 onKeyStroke("ArrowLeft", () => {
-  const oldArray = cloneArr(items.value);
+  const oldArray = clone(items.value);
 
   items.value.forEach((row, index) => {
     const result = processArrOnMoveLeft(row);
@@ -101,13 +80,13 @@ onKeyStroke("ArrowLeft", () => {
     items.value[index] = result;
   });
 
-  if (!isEqualArrs(oldArray, items.value)) {
+  if (!isEqual(oldArray, items.value)) {
     addRandomItem();
   }
 });
 
 onKeyStroke("ArrowRight", () => {
-  const oldArray = cloneArr(items.value);
+  const oldArray = clone(items.value);
 
   items.value.forEach((row, index) => {
     const result = processArrOnMoveRight(row);
@@ -115,13 +94,13 @@ onKeyStroke("ArrowRight", () => {
     items.value[index] = result;
   });
 
-  if (!isEqualArrs(oldArray, items.value)) {
+  if (!isEqual(oldArray, items.value)) {
     addRandomItem();
   }
 });
 
 onKeyStroke("ArrowUp", () => {
-  const oldArray = cloneArr(items.value);
+  const oldArray = clone(items.value);
 
   for (let i = 0; i < 4; i++) {
     let newRow: Array<number | null> = [];
@@ -137,13 +116,13 @@ onKeyStroke("ArrowUp", () => {
     }
   }
 
-  if (!isEqualArrs(oldArray, items.value)) {
+  if (!isEqual(oldArray, items.value)) {
     addRandomItem();
   }
 });
 
 onKeyStroke("ArrowDown", () => {
-  const oldArray = cloneArr(items.value);
+  const oldArray = clone(items.value);
 
   for (let i = 0; i < 4; i++) {
     let newRow: Array<number | null> = [];
@@ -159,7 +138,7 @@ onKeyStroke("ArrowDown", () => {
     }
   }
 
-  if (!isEqualArrs(oldArray, items.value)) {
+  if (!isEqual(oldArray, items.value)) {
     addRandomItem();
   }
 });
