@@ -7,7 +7,8 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "normalize.css": "^8.0.1",
@@ -19,6 +20,7 @@
     "happy-dom": "^14.12.3",
     "nuxt": "^3.13.2",
     "playwright-core": "^1.46.1",
+    "prettier": "^3.3.3",
     "vitest": "^2.0.5"
   }
 }

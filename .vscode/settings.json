@@ -9,5 +9,10 @@
     "**/node_modules": true,
     "**/*-lock.json": true,
     "**/.nuxt": true
-  }
+  },
+
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+
+  "prettier.enable": true
 }

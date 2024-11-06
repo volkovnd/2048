@@ -19,11 +19,11 @@ describe("isEqualArrs", () => {
   it("array of array equal", () => {
     const arr1 = [
       [1, 2],
-      [3, 4],
+      [3, 4]
     ];
     const arr2 = [
       [1, 2],
-      [3, 4],
+      [3, 4]
     ];
 
     expect(isEqual(arr1, arr2)).toBeTruthy();
