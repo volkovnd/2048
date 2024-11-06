@@ -1,7 +1,7 @@
 <template>
   <h3
     v-if="isFinished"
-    style="text-align: center; font-size: 40px"
+    style="font-size: 40px; text-align: center"
   >
     Игра закончена!
   </h3>
@@ -95,6 +95,11 @@ watch(items, () => {
 
 <style>
 .wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
   font-family:
     system-ui,
     -apple-system,
@@ -109,26 +114,21 @@ watch(items, () => {
     "Segoe UI Emoji",
     "Segoe UI Symbol",
     "Noto Color Emoji";
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  width: 100vw;
 }
 
 .board {
+  display: grid;
+  grid-template-rows: repeat(4, 1fr);
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
   width: 800px;
   height: 800px;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(4, 1fr);
-  gap: 10px;
 }
 
 .board-item {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   font-size: 40px;
   font-weight: bold;
   background-color: #f0f0f0;

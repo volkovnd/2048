@@ -6,7 +6,7 @@ export default defineNuxtConfig({
 
   css: ["normalize.css/normalize.css"],
 
-  modules: ["@nuxt/test-utils", "@nuxt/eslint"],
+  modules: ["@nuxt/test-utils", "@nuxt/eslint", "@nuxtjs/stylelint-module"],
 
   typescript: {
     strict: true
