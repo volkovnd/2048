@@ -6,20 +6,19 @@
     Игра закончена!
   </h3>
   <div class="wrapper">
-    <div class="board">
+    <BoardContainer>
       <template
         v-for="(row, x) in items"
         :key="x"
       >
-        <div
+        <BoardItem
           v-for="(item, y) in row"
           :key="y"
-          class="board-item"
         >
           {{ item }}
-        </div>
+        </BoardItem>
       </template>
-    </div>
+    </BoardContainer>
   </div>
 </template>
 
@@ -98,6 +97,8 @@ watch(items, () => {
 </script>
 
 <style>
+@import "normalize.css/normalize.css";
+
 .wrapper {
   display: flex;
   align-items: center;
@@ -118,23 +119,5 @@ watch(items, () => {
     "Segoe UI Emoji",
     "Segoe UI Symbol",
     "Noto Color Emoji";
-}
-
-.board {
-  display: grid;
-  grid-template-rows: repeat(4, 1fr);
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-  width: 800px;
-  height: 800px;
-}
-
-.board-item {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 40px;
-  font-weight: bold;
-  background-color: #f0f0f0;
 }
 </style>

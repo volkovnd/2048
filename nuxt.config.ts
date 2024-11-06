@@ -4,8 +4,6 @@ export default defineNuxtConfig({
 
   telemetry: false,
 
-  css: ["normalize.css/normalize.css"],
-
   modules: ["@nuxt/test-utils", "@nuxt/eslint", "@nuxtjs/stylelint-module"],
 
   typescript: {
@@ -14,6 +12,10 @@ export default defineNuxtConfig({
 
   future: {
     typescriptBundlerResolution: true
+  },
+
+  features: {
+    inlineStyles: false
   },
 
   compatibilityDate: "2024-11-06"
