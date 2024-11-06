@@ -8,7 +8,8 @@
     "**/Thumbs.db": true,
     "**/node_modules": true,
     "**/*-lock.json": true,
-    "**/.nuxt": true
+    "**/.nuxt": true,
+    "**/.output": true
   },
 
   "editor.defaultFormatter": "esbenp.prettier-vscode",

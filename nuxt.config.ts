@@ -8,5 +8,11 @@ export default defineNuxtConfig({
 
   modules: ["@nuxt/test-utils", "@nuxt/eslint"],
 
-  compatibilityDate: "2024-07-04"
+  typescript: {
+    strict: true
+  },
+
+  future: {
+    typescriptBundlerResolution: true
+  }
 });
