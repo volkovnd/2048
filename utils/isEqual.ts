@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const isEqual = <T>(input1: T, input2: any): boolean => {
   if (Array.isArray(input1) && Array.isArray(input2)) {
     return input1.every((item, index) => {

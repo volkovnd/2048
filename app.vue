@@ -1,7 +1,7 @@
 <template>
   <h3
-    style="text-align: center; font-size: 40px"
     v-if="isFinished"
+    style="text-align: center; font-size: 40px"
   >
     Игра закончена!
   </h3>
