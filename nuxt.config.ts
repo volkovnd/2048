@@ -4,7 +4,7 @@ export default defineNuxtConfig({
 
   telemetry: false,
 
-  modules: ["@nuxt/test-utils/module"],
+  modules: ["@nuxt/test-utils"],
 
   compatibilityDate: "2024-07-04"
 });
