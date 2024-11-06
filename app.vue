@@ -26,6 +26,10 @@
 <script setup lang="ts">
 import type { ItemDashboard } from "@/types";
 
+useHead({
+  title: "2048"
+});
+
 const items = ref<ItemDashboard>(
   Array.from({ length: 4 }, () => Array(4).fill(null))
 );
