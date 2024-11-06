@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { rotateArr } from "./rotateArr";
+import { rotateArr } from "../rotateArr";
 
 describe("rotateArr", () => {
   it("rotateArr", () => {

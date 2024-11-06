@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { isEqual } from "./isEqual";
+import { isEqual } from "../isEqual";
 
 describe("isEqualArrs", () => {
   it("primitive equal arrs", () => {
