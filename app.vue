@@ -94,8 +94,6 @@ watch(items, () => {
 </script>
 
 <style>
-@import "normalize.css/normalize.css";
-
 .wrapper {
   font-family:
     system-ui,

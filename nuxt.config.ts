@@ -4,6 +4,8 @@ export default defineNuxtConfig({
 
   telemetry: false,
 
+  css: ["normalize.css/normalize.css"],
+
   modules: ["@nuxt/test-utils", "@nuxt/eslint"],
 
   compatibilityDate: "2024-07-04"
