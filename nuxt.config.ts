@@ -14,5 +14,7 @@ export default defineNuxtConfig({
 
   future: {
     typescriptBundlerResolution: true
-  }
+  },
+
+  compatibilityDate: "2024-11-06"
 });
