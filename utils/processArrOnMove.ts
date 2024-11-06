@@ -1,7 +1,7 @@
-import type { ItemRow } from "@/types";
+import type { Item } from "@/types";
 
-export const processArrOnMoveLeft = (input: ItemRow) => {
-  const removeSpaces = <T>(input: Array<T>): Array<T> => {
+export const processArrOnMoveLeft = (input: Item[]) => {
+  const removeSpaces = (input: Array<Item>): Array<Item> => {
     return input.filter((input) => input !== null);
   };
 
@@ -25,6 +25,6 @@ export const processArrOnMoveLeft = (input: ItemRow) => {
   return newRow;
 };
 
-export const processArrOnMoveRight = (input: ItemRow) => {
+export const processArrOnMoveRight = (input: Item[]) => {
   return processArrOnMoveLeft(input.reverse()).reverse();
 };
