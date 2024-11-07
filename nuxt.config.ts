@@ -8,9 +8,7 @@ export default defineNuxtConfig({
     head: {
       htmlAttrs: {
         lang: "ru"
-      },
-
-      link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }]
+      }
     }
   },
 
