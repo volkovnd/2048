@@ -36,5 +36,8 @@
   "stylelint.enable": true,
   "stylelint.validate": ["css", "postcss"],
 
-  "typescript.tsdk": "node_modules\\typescript\\lib"
+  "typescript.tsdk": "node_modules\\typescript\\lib",
+  "yaml.schemas": {
+    "https://json.schemastore.org/github-workflow.json": "file:///c%3A/Users/HONOR/Projects/2048/.github/workflows/deploy.yml"
+  }
 }
