@@ -25,7 +25,7 @@
 <script setup lang="ts">
 import type { ItemDashboard } from "@/types";
 
-useHead({
+useSeoMeta({
   title: "2048"
 });
 

@@ -4,6 +4,16 @@ export default defineNuxtConfig({
 
   telemetry: false,
 
+  app: {
+    head: {
+      htmlAttrs: {
+        lang: "ru"
+      },
+
+      link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }]
+    }
+  },
+
   modules: ["@nuxt/test-utils", "@nuxt/eslint", "@nuxtjs/stylelint-module"],
 
   typescript: {
