@@ -1,6 +1,7 @@
 {
-  "name": "nuxt-app",
+  "name": "@volkovnd/2048",
   "private": true,
+  "homepage": "https://volkovnd.github.io/2048/",
   "type": "module",
   "scripts": {
     "build": "nuxt build",
