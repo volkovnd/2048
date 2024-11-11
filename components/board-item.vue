@@ -19,15 +19,15 @@ const textColor = computed(() => {
     case 2:
       return "#000";
     case 4:
-      return "#220";
+      return "#330";
     case 8:
-      return "#440";
-    case 16:
       return "#660";
-    case 32:
+    case 16:
       return "#880";
-    case 64:
+    case 32:
       return "#828";
+    case 64:
+      return "#848";
     case 128:
       return "#858";
     case 256:
@@ -49,8 +49,7 @@ const textColor = computed(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 40px;
-  font-weight: bold;
+  font-size: 48px;
   background-color: #f0f0f0;
 }
 </style>
