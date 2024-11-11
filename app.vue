@@ -26,9 +26,7 @@ useSeoMeta({
   title: "2048"
 });
 
-const items = ref<ItemDashboard>(
-  Array.from({ length: 4 }, () => Array(4).fill(null))
-);
+const items = ref<ItemDashboard>(Array.from({ length: 4 }, () => Array(4).fill(null)));
 
 const addRandomItem = () => {
   const emptyItems: Array<{ x: number; y: number }> = [];
@@ -43,10 +41,7 @@ const addRandomItem = () => {
 
   const randIndex = randomInt(emptyItems.length - 1);
 
-  items.value[emptyItems[randIndex].y][emptyItems[randIndex].x] = Math.pow(
-    2,
-    randomInt(2, 1)
-  );
+  items.value[emptyItems[randIndex].y][emptyItems[randIndex].x] = Math.pow(2, randomInt(2, 1));
 };
 
 const isAllowedAction = (action: () => ItemDashboard) => {
@@ -68,12 +63,9 @@ const createOnKeyHandler = (createResultFn: () => ItemDashboard) => {
 };
 
 const onLeft = () => clone(items.value).map((row) => processArrOnMoveLeft(row));
-const onRight = () =>
-  clone(items.value).map((row) => processArrOnMoveRight(row));
-const onUp = () =>
-  rotateArr(rotateArr(items.value).map((row) => processArrOnMoveLeft(row)));
-const onDown = () =>
-  rotateArr(rotateArr(items.value).map((row) => processArrOnMoveRight(row)));
+const onRight = () => clone(items.value).map((row) => processArrOnMoveRight(row));
+const onUp = () => rotateArr(rotateArr(items.value).map((row) => processArrOnMoveLeft(row)));
+const onDown = () => rotateArr(rotateArr(items.value).map((row) => processArrOnMoveRight(row)));
 
 useKeyDown("ArrowLeft", createOnKeyHandler(onLeft));
 useKeyDown("ArrowRight", createOnKeyHandler(onRight));
@@ -83,9 +75,7 @@ useKeyDown("ArrowDown", createOnKeyHandler(onDown));
 const isFinished = ref(false);
 
 watch(items, () => {
-  isFinished.value = [onLeft, onRight, onUp, onDown].every(
-    (fn) => !isAllowedAction(fn)
-  );
+  isFinished.value = [onLeft, onRight, onUp, onDown].every((fn) => !isAllowedAction(fn));
 });
 
 onMounted(() => {
