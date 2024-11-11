@@ -5,21 +5,18 @@
   >
     Игра закончена!
   </h3>
-  <div class="wrapper">
-    <BoardContainer>
-      <template
-        v-for="(row, x) in items"
-        :key="x"
-      >
-        <BoardItem
-          v-for="(item, y) in row"
-          :key="y"
-        >
-          {{ item }}
-        </BoardItem>
-      </template>
-    </BoardContainer>
-  </div>
+  <BoardContainer>
+    <template
+      v-for="(row, x) in items"
+      :key="x"
+    >
+      <BoardItem
+        v-for="(item, y) in row"
+        :key="y"
+        :value="item"
+      />
+    </template>
+  </BoardContainer>
 </template>
 
 <script setup lang="ts">
@@ -34,39 +31,35 @@ const items = ref<ItemDashboard>(
 );
 
 const addRandomItem = () => {
-  const emptyItems = items.value.reduce<Array<{ x: number; y: number }>>(
-    (acc, row, y) => {
-      row.forEach((item, x) => {
-        if (item === null) {
-          acc.push({ x, y });
-        }
-      });
+  const emptyItems: Array<{ x: number; y: number }> = [];
 
-      return acc;
-    },
-    []
+  items.value.forEach((row, y) => {
+    row.forEach((item, x) => {
+      if (item === null) {
+        emptyItems.push({ x, y });
+      }
+    });
+  });
+
+  const randIndex = randomInt(emptyItems.length - 1);
+
+  items.value[emptyItems[randIndex].y][emptyItems[randIndex].x] = Math.pow(
+    2,
+    randomInt(2, 1)
   );
-
-  const randIndex = randomInt(emptyItems.length);
-
-  items.value[emptyItems[randIndex].y][emptyItems[randIndex].x] = 2;
 };
-
-onMounted(() => {
-  addRandomItem();
-});
 
 const isAllowedAction = (action: () => ItemDashboard) => {
   const result = action();
 
-  return !isEqual(result, items.value);
+  return !isEqualBoard(result, items.value);
 };
 
 const createOnKeyHandler = (createResultFn: () => ItemDashboard) => {
   return () => {
     const result = createResultFn();
 
-    if (!isEqual(result, items.value)) {
+    if (!isEqualBoard(result, items.value)) {
       items.value = result;
 
       addRandomItem();
@@ -94,30 +87,8 @@ watch(items, () => {
     (fn) => !isAllowedAction(fn)
   );
 });
+
+onMounted(() => {
+  addRandomItem();
+});
 </script>
-
-<style>
-@import "normalize.css/normalize.css";
-
-.wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100vw;
-  height: 100vh;
-  font-family:
-    system-ui,
-    -apple-system,
-    "Segoe UI",
-    Roboto,
-    "Helvetica Neue",
-    "Noto Sans",
-    "Liberation Sans",
-    Arial,
-    sans-serif,
-    "Apple Color Emoji",
-    "Segoe UI Emoji",
-    "Segoe UI Symbol",
-    "Noto Color Emoji";
-}
-</style>
