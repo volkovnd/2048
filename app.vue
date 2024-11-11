@@ -1,4 +1,10 @@
 <template>
+  <h3
+    v-if="isFinished"
+    style="font-size: 40px; text-align: center"
+  >
+    Игра закончена!
+  </h3>
   <BoardContainer>
     <template
       v-for="(row, x) in items"
@@ -11,13 +17,6 @@
       />
     </template>
   </BoardContainer>
-
-  <h3
-    v-if="isFinished"
-    style="font-size: 40px; text-align: center"
-  >
-    Игра закончена!
-  </h3>
 </template>
 
 <script setup lang="ts">
@@ -32,22 +31,22 @@ const items = ref<ItemDashboard>(
 );
 
 const addRandomItem = () => {
-  const emptyItems = items.value.reduce<Array<{ x: number; y: number }>>(
-    (acc, row, y) => {
-      row.forEach((item, x) => {
-        if (item === null) {
-          acc.push({ x, y });
-        }
-      });
+  const emptyItems: Array<{ x: number; y: number }> = [];
 
-      return acc;
-    },
-    []
+  items.value.forEach((row, y) => {
+    row.forEach((item, x) => {
+      if (item === null) {
+        emptyItems.push({ x, y });
+      }
+    });
+  });
+
+  const randIndex = randomInt(emptyItems.length - 1);
+
+  items.value[emptyItems[randIndex].y][emptyItems[randIndex].x] = Math.pow(
+    2,
+    randomInt(2, 1)
   );
-
-  const randIndex = randomInt(emptyItems.length);
-
-  items.value[emptyItems[randIndex].y][emptyItems[randIndex].x] = 2;
 };
 
 const isAllowedAction = (action: () => ItemDashboard) => {
