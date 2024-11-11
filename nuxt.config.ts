@@ -21,7 +21,16 @@ export default defineNuxtConfig({
     }
   },
 
-  modules: ["@nuxt/test-utils", "@nuxt/eslint", "@nuxtjs/stylelint-module"],
+  modules: ["@nuxt/test-utils", "@nuxt/eslint", "@nuxtjs/stylelint-module", "@nuxtjs/google-fonts"],
+
+  googleFonts: {
+    families: {
+      Roboto: {
+        wght: [400]
+      }
+    },
+    display: "swap"
+  },
 
   typescript: {
     strict: true
