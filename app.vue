@@ -14,9 +14,8 @@
         <BoardItem
           v-for="(item, y) in row"
           :key="y"
-        >
-          {{ item }}
-        </BoardItem>
+          :value="item"
+        />
       </template>
     </BoardContainer>
   </div>
@@ -95,29 +94,3 @@ watch(items, () => {
   );
 });
 </script>
-
-<style>
-@import "normalize.css/normalize.css";
-
-.wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100vw;
-  height: 100vh;
-  font-family:
-    system-ui,
-    -apple-system,
-    "Segoe UI",
-    Roboto,
-    "Helvetica Neue",
-    "Noto Sans",
-    "Liberation Sans",
-    Arial,
-    sans-serif,
-    "Apple Color Emoji",
-    "Segoe UI Emoji",
-    "Segoe UI Symbol",
-    "Noto Color Emoji";
-}
-</style>
