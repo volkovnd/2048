@@ -34,7 +34,7 @@
   "prettier.enable": true,
 
   "stylelint.enable": true,
-  "stylelint.validate": ["css", "postcss"],
+  "stylelint.validate": ["css", "postcss", "scss", "vue"],
 
   "typescript.tsdk": "node_modules\\typescript\\lib",
   "yaml.schemas": {
