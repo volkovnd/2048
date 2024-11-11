@@ -1,12 +1,4 @@
 <template>
-  <Head>
-    <Link
-      rel="icon"
-      type="image/x-icon"
-      :href="`${$config.app.baseURL}favicon.ico`"
-    />
-  </Head>
-
   <h3
     v-if="isFinished"
     style="font-size: 40px; text-align: center"

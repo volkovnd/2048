@@ -8,7 +8,14 @@ export default defineNuxtConfig({
     head: {
       htmlAttrs: {
         lang: "ru"
-      }
+      },
+      link: [
+        {
+          rel: "icon",
+          type: "image/x-icon",
+          href: `${import.meta.env.NUXT_APP_BASE_URL || "/"}/favicon.ico`
+        }
+      ]
     }
   },
 
