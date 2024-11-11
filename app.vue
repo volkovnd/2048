@@ -1,24 +1,23 @@
 <template>
+  <BoardContainer>
+    <template
+      v-for="(row, x) in items"
+      :key="x"
+    >
+      <BoardItem
+        v-for="(item, y) in row"
+        :key="y"
+        :value="item"
+      />
+    </template>
+  </BoardContainer>
+
   <h3
     v-if="isFinished"
     style="font-size: 40px; text-align: center"
   >
     Игра закончена!
   </h3>
-  <div class="wrapper">
-    <BoardContainer>
-      <template
-        v-for="(row, x) in items"
-        :key="x"
-      >
-        <BoardItem
-          v-for="(item, y) in row"
-          :key="y"
-          :value="item"
-        />
-      </template>
-    </BoardContainer>
-  </div>
 </template>
 
 <script setup lang="ts">
@@ -51,21 +50,17 @@ const addRandomItem = () => {
   items.value[emptyItems[randIndex].y][emptyItems[randIndex].x] = 2;
 };
 
-onMounted(() => {
-  addRandomItem();
-});
-
 const isAllowedAction = (action: () => ItemDashboard) => {
   const result = action();
 
-  return !isEqual(result, items.value);
+  return !isEqualBoard(result, items.value);
 };
 
 const createOnKeyHandler = (createResultFn: () => ItemDashboard) => {
   return () => {
     const result = createResultFn();
 
-    if (!isEqual(result, items.value)) {
+    if (!isEqualBoard(result, items.value)) {
       items.value = result;
 
       addRandomItem();
@@ -92,5 +87,9 @@ watch(items, () => {
   isFinished.value = [onLeft, onRight, onUp, onDown].every(
     (fn) => !isAllowedAction(fn)
   );
+});
+
+onMounted(() => {
+  addRandomItem();
 });
 </script>
