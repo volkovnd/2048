@@ -1,30 +1,22 @@
 import type { Item } from "@/types";
 
 export const processArrOnMoveLeft = (input: Item[]) => {
-  const removeSpaces = (input: Array<Item>): Array<Item> => {
-    return input.filter((input) => input !== null);
-  };
+  const newRow = clone(input).filter((input) => input !== null);
 
-  let newRow = removeSpaces(input);
+  for (let i = 0; i < newRow.length - 1; i++) {
+    const current = newRow[i] as number;
+    const next = newRow[i + 1] as number;
 
-  for (let i = 0; i < newRow.length; i++) {
-    const current = newRow[i];
-    const next = newRow[i + 1];
-
-    if (current !== null && current === next) {
+    if (current === next) {
       newRow[i] = current * 2;
 
-      newRow[i + 1] = null;
+      newRow.splice(i + 1, 1);
     }
   }
 
-  newRow = removeSpaces(newRow);
-
-  newRow = newRow.concat(Array(4 - newRow.length).fill(null));
-
-  return newRow;
+  return newRow.concat(Array(4 - newRow.length).fill(null));
 };
 
 export const processArrOnMoveRight = (input: Item[]) => {
-  return processArrOnMoveLeft(input.reverse()).reverse();
+  return processArrOnMoveLeft(clone(input).reverse()).reverse();
 };
