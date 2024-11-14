@@ -51,6 +51,13 @@ export default defineNuxtConfig({
   compatibilityDate: "2024-11-06",
 
   stylelint: {
-    exclude: ["**/node_modules/**", "**/dist/**", "**/.nuxt/**", "**/.output/**"]
+    exclude: [
+      "**/node_modules/**",
+      "**/dist/**",
+      "**/.nuxt/**",
+      "**/.output/**",
+      "**/.vscode/**",
+      "virtual:"
+    ]
   }
 });
