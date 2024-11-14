@@ -48,5 +48,9 @@ export default defineNuxtConfig({
     preset: "static"
   },
 
-  compatibilityDate: "2024-11-06"
+  compatibilityDate: "2024-11-06",
+
+  stylelint: {
+    exclude: ["**/node_modules/**", "**/dist/**", "**/.nuxt/**", "**/.output/**"]
+  }
 });
