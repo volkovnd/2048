@@ -22,29 +22,25 @@ export default defineNuxtConfig({
   },
 
   modules: [
-    "@nuxt/test-utils",
+    "@nuxtjs/google-fonts",
     "@nuxt/eslint",
     "@nuxtjs/stylelint-module",
-    "@nuxtjs/google-fonts",
-    "@vueuse/nuxt"
+    "@vueuse/nuxt",
+    "@nuxt/test-utils"
   ],
 
   googleFonts: {
-    useStylesheet: true,
     families: {
       Roboto: {
         wght: [400]
       }
     },
+
     display: "swap"
   },
 
   typescript: {
     strict: true
-  },
-
-  future: {
-    typescriptBundlerResolution: true
   },
 
   features: {
@@ -55,7 +51,7 @@ export default defineNuxtConfig({
     preset: "static"
   },
 
-  compatibilityDate: "2024-11-06",
+  compatibilityDate: "2024-04-03",
 
   stylelint: {
     exclude: [
