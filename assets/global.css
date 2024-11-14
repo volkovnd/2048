@@ -1,0 +1,14 @@
+:root {
+  --gap: max(2vmin, 1rem);
+  --board-size: 100vmin;
+}
+
+html {
+  font-family: Roboto, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}

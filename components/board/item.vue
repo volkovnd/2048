@@ -49,9 +49,9 @@ const textColor = computed(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 48px;
+  font-size: calc((var(--board-size) / 4 - var(--gap)) / 2);
   background-color: #f0f0f0;
-  border: 1px solid #d0d0d0;
+  border: 1px solid #0003;
   border-radius: 5%;
   box-shadow:
     0 1px 3px -1px #0003,

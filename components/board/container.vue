@@ -6,17 +6,13 @@
 
 <style scoped>
 .board {
-  --gap: 10px;
-  --size: 100vmin;
-
-  box-sizing: border-box;
   display: grid;
   grid-template-rows: repeat(4, 1fr);
   grid-template-columns: repeat(4, 1fr);
   gap: var(--gap);
-  width: var(--size);
-  height: var(--size);
-  padding: var(--gap);
+  width: var(--board-size);
+  height: var(--board-size);
+  padding: calc(var(--gap) / 2);
   margin-right: auto;
   margin-left: auto;
 }

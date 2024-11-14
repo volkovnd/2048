@@ -4,7 +4,7 @@ export default defineNuxtConfig({
 
   telemetry: false,
 
-  css: ["normalize.css"],
+  css: ["normalize.css", "~/assets/global.css"],
 
   app: {
     head: {
@@ -30,6 +30,7 @@ export default defineNuxtConfig({
   ],
 
   googleFonts: {
+    useStylesheet: true,
     families: {
       Roboto: {
         wght: [400]
