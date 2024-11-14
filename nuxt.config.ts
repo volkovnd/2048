@@ -1,10 +1,10 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  devtools: { enabled: true },
+  devtools: { enabled: true, telemetry: false },
 
   telemetry: false,
 
-  css: ["normalize.css/normalize.css"],
+  css: ["normalize.css"],
 
   app: {
     head: {
@@ -42,6 +42,10 @@ export default defineNuxtConfig({
 
   features: {
     inlineStyles: false
+  },
+
+  nitro: {
+    preset: "static"
   },
 
   compatibilityDate: "2024-11-06"
