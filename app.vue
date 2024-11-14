@@ -67,10 +67,10 @@ const onRight = () => clone(items.value).map((row) => processArrOnMoveRight(row)
 const onUp = () => rotateArr(rotateArr(items.value).map((row) => processArrOnMoveLeft(row)));
 const onDown = () => rotateArr(rotateArr(items.value).map((row) => processArrOnMoveRight(row)));
 
-useKeyDown("ArrowLeft", createOnKeyHandler(onLeft));
-useKeyDown("ArrowRight", createOnKeyHandler(onRight));
-useKeyDown("ArrowUp", createOnKeyHandler(onUp));
-useKeyDown("ArrowDown", createOnKeyHandler(onDown));
+onKeyStroke("ArrowLeft", createOnKeyHandler(onLeft));
+onKeyStroke("ArrowRight", createOnKeyHandler(onRight));
+onKeyStroke("ArrowUp", createOnKeyHandler(onUp));
+onKeyStroke("ArrowDown", createOnKeyHandler(onDown));
 
 const isFinished = ref(false);
 

@@ -21,7 +21,13 @@ export default defineNuxtConfig({
     }
   },
 
-  modules: ["@nuxt/test-utils", "@nuxt/eslint", "@nuxtjs/stylelint-module", "@nuxtjs/google-fonts"],
+  modules: [
+    "@nuxt/test-utils",
+    "@nuxt/eslint",
+    "@nuxtjs/stylelint-module",
+    "@nuxtjs/google-fonts",
+    "@vueuse/nuxt"
+  ],
 
   googleFonts: {
     families: {
