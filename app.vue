@@ -1,39 +1,35 @@
 <template>
   <AppHeader @reset="reset">
     <template #status>
-      <h3
-        v-if="isFinished"
-        style="font-size: max(3.5vmin, 1rem); text-align: center"
-      >
-        Игра закончена!
-      </h3>
-
-      <h3
-        v-else
-        style="font-size: max(3.5vmin, 1rem); text-align: center"
-      >
-        Результат: {{ result }}
-      </h3>
+      <ClientOnly>
+        <h3 style="font-size: max(3.5vmin, 1rem); text-align: center">Результат: {{ result }}</h3>
+        <h3
+          v-if="isFinished"
+          style="
+            margin-left: 1rem;
+            font-size: max(3.5vmin, 1rem);
+            color: var(--primary);
+            text-align: center;
+          "
+        >
+          Игра закончена!
+        </h3>
+      </ClientOnly>
     </template>
   </AppHeader>
-  <BoardContainer
-    @mouse-down.middle="
-      () => {
-        console.log('TETETTE');
-      }
-    "
-  >
-    <template
-      v-for="(row, x) in items"
-      :key="x"
-    >
-      <BoardItem
-        v-for="(item, y) in row"
-        :key="y"
-        :value="item"
-        :disabled="isFinished"
-      />
-    </template>
+  <BoardContainer>
+    <ClientOnly>
+      <template
+        v-for="(row, x) in items"
+        :key="x"
+      >
+        <BoardItem
+          v-for="(item, y) in row"
+          :key="y"
+          :value="item"
+          :disabled="isFinished"
+        /> </template
+    ></ClientOnly>
   </BoardContainer>
 </template>
 
@@ -44,9 +40,20 @@ useSeoMeta({
   title: "2048"
 });
 
-const items = ref<ItemDashboard>(
-  Array.from({ length: 4 }, () => Array.from({ length: 4 }, () => null))
-);
+const generateInitialBoard = () => {
+  const items = Array.from({ length: 4 }, () =>
+    Array.from({ length: 4 }, () => null)
+  ) as ItemDashboard;
+
+  const x = randomInt(3);
+  const y = randomInt(3);
+
+  items[y][x] = randomInt(10, 0) < 9 ? 2 : 4;
+
+  return items;
+};
+
+const items = useSessionStorage<ItemDashboard>("2048-items", generateInitialBoard());
 
 const result = ref(0);
 
@@ -112,14 +119,8 @@ watch(items, () => {
   isFinished.value = [onLeft, onRight, onUp, onDown].every((fn) => !isAllowedAction(fn()));
 });
 
-onMounted(() => {
-  addRandomItem();
-});
-
 const reset = () => {
-  items.value = Array.from({ length: 4 }, () => Array.from({ length: 4 }, () => null));
-
-  addRandomItem();
+  items.value = generateInitialBoard();
 
   result.value = 0;
 
