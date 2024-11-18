@@ -28,7 +28,8 @@ export default defineNuxtConfig({
     "@nuxt/eslint",
     "@nuxtjs/stylelint-module",
     "@vueuse/nuxt",
-    "@nuxt/test-utils"
+    "@nuxt/test-utils",
+    "@nuxtjs/color-mode"
   ],
 
   googleFonts: {

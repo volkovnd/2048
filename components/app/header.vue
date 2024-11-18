@@ -9,10 +9,28 @@
 
     <button
       type="button"
-      class="ui-button"
+      class="ui-button mx-gap"
       @click="$emit('reset')"
     >
       Заново
+    </button>
+
+    <button
+      v-if="$colorMode.value === 'dark'"
+      type="button"
+      class="ui-button mx-gap"
+      @click="$colorMode.preference = 'light'"
+    >
+      Светлая
+    </button>
+
+    <button
+      v-else
+      type="button"
+      class="ui-button mx-gap"
+      @click="$colorMode.preference = 'dark'"
+    >
+      Темная
     </button>
   </header>
 </template>

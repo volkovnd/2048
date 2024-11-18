@@ -1,6 +1,6 @@
 <template>
   <div
-    class="board-item row row-center"
+    class="board-item row row-center shadow"
     :class="{ 'board-item-disabled': disabled }"
     :style="{ color: textColor }"
   >
@@ -52,10 +52,6 @@ const textColor = computed(() => {
   background-color: #f0f0f0;
   border: 1px solid #0003;
   border-radius: 5%;
-  box-shadow:
-    0 1px 3px -1px #0003,
-    0 3px 5px #00000024,
-    0 1px 9px #0000001f;
 }
 
 .board-item-disabled {
