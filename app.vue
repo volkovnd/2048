@@ -31,6 +31,7 @@
         v-for="(item, y) in row"
         :key="y"
         :value="item"
+        :disabled="isFinished"
       />
     </template>
   </BoardContainer>

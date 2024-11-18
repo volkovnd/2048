@@ -1,6 +1,7 @@
 <template>
   <div
     class="board-item"
+    :class="{ 'board-item-disabled': disabled }"
     :style="{ color: textColor }"
   >
     {{ value }}
@@ -12,6 +13,7 @@ import type { Item } from "~/types";
 
 const props = defineProps<{
   value: Item;
+  disabled?: boolean;
 }>();
 
 const textColor = computed(() => {
@@ -57,5 +59,10 @@ const textColor = computed(() => {
     0 1px 3px -1px #0003,
     0 3px 5px #00000024,
     0 1px 9px #0000001f;
+}
+
+.board-item-disabled {
+  cursor: no-drop;
+  background-color: #c8c8c8;
 }
 </style>
