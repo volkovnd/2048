@@ -1,5 +1,8 @@
 {
   "name": "@volkovnd/2048",
+  "version": "0.1.0",
+  "author": "Volkov Nikolay <volkovnd@yandex.ru>",
+  "license": "MIT",
   "private": true,
   "homepage": "https://volkovnd.github.io/2048/",
   "type": "module",
