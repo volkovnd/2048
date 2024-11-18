@@ -1,36 +1,40 @@
 <template>
-  <AppHeader @reset="reset">
-    <template #status>
+  <div>
+    <AppHeader @reset="reset">
+      <template #status>
+        <ClientOnly>
+          <h3 style="font-size: max(3.5vmin, 1rem); text-align: center">Результат: {{ result }}</h3>
+          <h3
+            v-if="isFinished"
+            style="
+              margin-left: 1rem;
+              font-size: max(3.5vmin, 1rem);
+              color: var(--primary);
+              text-align: center;
+            "
+          >
+            Игра закончена!
+          </h3>
+        </ClientOnly>
+      </template>
+    </AppHeader>
+
+    <BoardContainer>
       <ClientOnly>
-        <h3 style="font-size: max(3.5vmin, 1rem); text-align: center">Результат: {{ result }}</h3>
-        <h3
-          v-if="isFinished"
-          style="
-            margin-left: 1rem;
-            font-size: max(3.5vmin, 1rem);
-            color: var(--primary);
-            text-align: center;
-          "
+        <template
+          v-for="(row, x) in items"
+          :key="x"
         >
-          Игра закончена!
-        </h3>
+          <BoardItem
+            v-for="(item, y) in row"
+            :key="y"
+            :value="item"
+            :disabled="isFinished"
+          />
+        </template>
       </ClientOnly>
-    </template>
-  </AppHeader>
-  <BoardContainer>
-    <ClientOnly>
-      <template
-        v-for="(row, x) in items"
-        :key="x"
-      >
-        <BoardItem
-          v-for="(item, y) in row"
-          :key="y"
-          :value="item"
-          :disabled="isFinished"
-        /> </template
-    ></ClientOnly>
-  </BoardContainer>
+    </BoardContainer>
+  </div>
 </template>
 
 <script setup lang="ts">

@@ -1,5 +1,8 @@
 <template>
-  <header id="header">
+  <header
+    id="header"
+    class="row row-center mx-auto"
+  >
     <slot name="status" />
 
     <div style="flex-grow: 1" />
@@ -22,13 +25,9 @@ defineEmits<{
 
 <style lang="css">
 #header {
-  display: flex;
-  align-items: center;
   width: var(--board-size);
   height: var(--header-height);
   padding: calc(var(--gap) / 2);
-  margin-right: auto;
-  margin-left: auto;
 }
 
 .ui-button {

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="board-item"
+    class="board-item row row-center"
     :class="{ 'board-item-disabled': disabled }"
     :style="{ color: textColor }"
   >
@@ -48,9 +48,6 @@ const textColor = computed(() => {
 
 <style scoped>
 .board-item {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   font-size: calc((var(--board-size) / 4 - var(--gap)) / 2);
   background-color: #f0f0f0;
   border: 1px solid #0003;

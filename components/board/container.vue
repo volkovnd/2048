@@ -1,5 +1,5 @@
 <template>
-  <div class="board">
+  <div class="board mx-auto">
     <slot />
   </div>
 </template>
@@ -13,7 +13,5 @@
   width: var(--board-size);
   height: var(--board-size);
   padding: calc(var(--gap) / 2);
-  margin-right: auto;
-  margin-left: auto;
 }
 </style>

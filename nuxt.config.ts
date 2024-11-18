@@ -18,7 +18,9 @@ export default defineNuxtConfig({
           href: `${import.meta.env.BASE_URL || "/"}favicon.ico`
         }
       ]
-    }
+    },
+
+    keepalive: true
   },
 
   modules: [
@@ -58,6 +60,10 @@ export default defineNuxtConfig({
   },
 
   stylelint: {
+    lintOnStart: false,
+    build: true,
+    dev: false,
+
     exclude: [
       "**/node_modules/**",
       "**/dist/**",
@@ -73,6 +79,16 @@ export default defineNuxtConfig({
         "stylelint-config-recommended-vue",
         "stylelint-config-recess-order"
       ]
+    }
+  },
+  experimental: {
+    appManifest: false,
+    renderJsonPayloads: false
+  },
+  logLevel: "verbose",
+  unhead: {
+    renderSSRHeadOptions: {
+      omitLineBreaks: true
     }
   }
 });
