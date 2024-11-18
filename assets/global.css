@@ -1,6 +1,9 @@
 :root {
+  --header-height: 5rem;
   --gap: max(2vmin, 1rem);
-  --board-size: 100vmin;
+  --board-size: calc(100vmin - var(--header-height));
+
+  --primary: #0097a7;
 }
 
 html {

@@ -1,10 +1,14 @@
 <template>
-  <h3
-    v-if="isFinished"
-    style="font-size: 40px; text-align: center"
-  >
-    Игра закончена!
-  </h3>
+  <AppHeader @reset="reset">
+    <template #status>
+      <h3
+        v-if="isFinished"
+        style="font-size: 40px; text-align: center"
+      >
+        Игра закончена!
+      </h3>
+    </template>
+  </AppHeader>
   <BoardContainer>
     <template
       v-for="(row, x) in items"
@@ -81,4 +85,12 @@ watch(items, () => {
 onMounted(() => {
   addRandomItem();
 });
+
+const reset = () => {
+  items.value = Array.from({ length: 4 }, () => Array(4).fill(null));
+
+  addRandomItem();
+
+  isFinished.value = false;
+};
 </script>
