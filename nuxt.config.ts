@@ -15,7 +15,7 @@ export default defineNuxtConfig({
         {
           rel: "icon",
           type: "image/x-icon",
-          href: `${import.meta.env.NUXT_APP_BASE_URL || "/"}favicon.ico`
+          href: `${import.meta.env.BASE_URL || "/"}favicon.ico`
         }
       ]
     }
