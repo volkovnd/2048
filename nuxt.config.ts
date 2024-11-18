@@ -18,9 +18,7 @@ export default defineNuxtConfig({
           href: `${import.meta.env.BASE_URL || "/"}favicon.ico`
         }
       ]
-    },
-
-    keepalive: true
+    }
   },
 
   modules: [
@@ -29,9 +27,10 @@ export default defineNuxtConfig({
     "@nuxtjs/stylelint-module",
     "@vueuse/nuxt",
     "@nuxt/test-utils",
-    "@nuxtjs/color-mode",
-    "@nuxt/icon"
+    "@nuxtjs/color-mode"
   ],
+
+  spaLoadingTemplate: false,
 
   googleFonts: {
     families: {
@@ -82,14 +81,5 @@ export default defineNuxtConfig({
         "stylelint-config-recess-order"
       ]
     }
-  },
-  experimental: {
-    appManifest: false,
-    renderJsonPayloads: false,
-    componentIslands: false
-  },
-  icon: {
-    provider: "iconify",
-    serverBundle: false
   }
 });

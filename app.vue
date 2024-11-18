@@ -1,51 +1,49 @@
 <template>
   <div>
-    <AppHeader @reset="reset">
-      <template #status>
-        <ClientOnly>
-          <h3
-            style="font-size: max(3.5vmin, 1rem); text-align: center"
-            class="my-auto"
-          >
-            Результат: {{ result }}
-          </h3>
-          <h3
-            v-if="isFinished"
-            style="
-              margin-left: 1rem;
-              font-size: max(3.5vmin, 1rem);
-              color: var(--primary);
-              text-align: center;
-            "
-          >
-            Игра закончена!
-          </h3>
-        </ClientOnly>
-      </template>
-    </AppHeader>
-
-    <BoardContainer>
-      <ClientOnly>
-        <template
-          v-for="(row, x) in items"
-          :key="x"
-        >
-          <BoardItem
-            v-for="(item, y) in row"
-            :key="y"
-            :value="item"
-            :disabled="isFinished"
-          />
+    <NuxtLayout>
+      <AppHeader @reset="reset">
+        <template #status>
+          <ClientOnly>
+            <h3
+              style="font-size: max(3.5vmin, 1rem); text-align: center"
+              class="my-auto"
+            >
+              Результат: {{ result }}
+            </h3>
+            <h3
+              v-if="isFinished"
+              class="my-none mx-auto"
+              style="font-size: max(3.5vmin, 1rem); text-align: center"
+            >
+              Игра закончена!
+            </h3>
+          </ClientOnly>
         </template>
-      </ClientOnly>
-    </BoardContainer>
+      </AppHeader>
+
+      <BoardContainer>
+        <ClientOnly>
+          <template
+            v-for="(row, x) in items"
+            :key="x"
+          >
+            <BoardItem
+              v-for="(item, y) in row"
+              :key="y"
+              :value="item"
+              :disabled="isFinished"
+            />
+          </template>
+        </ClientOnly>
+      </BoardContainer>
+    </NuxtLayout>
   </div>
 </template>
 
 <script setup lang="ts">
 import type { ItemDashboard } from "@/types";
 
-useSeoMeta({
+useHead({
   title: "2048"
 });
 
@@ -124,9 +122,15 @@ onKeyStroke("ArrowDown", createOnKeyHandler(onDown(addToResult)));
 
 const isFinished = ref(false);
 
-watch(items, () => {
-  isFinished.value = [onLeft, onRight, onUp, onDown].every((fn) => !isAllowedAction(fn()));
-});
+watch(
+  items,
+  () => {
+    isFinished.value = [onLeft, onRight, onUp, onDown].every((fn) => !isAllowedAction(fn()));
+  },
+  {
+    immediate: true
+  }
+);
 
 const reset = () => {
   items.value = generateInitialBoard();

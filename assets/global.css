@@ -6,12 +6,22 @@
   --text-color: #000;
 
   --primary: #0097a7;
+  --secondary: #f0f0f0;
+  --disabled: #c8c8c8;
 }
 
 .dark-mode {
-  --primary: #113c41;
-  --background-bg: #1f1f1f;
+  --primary: #090e0f;
+  --secondary: #b4b1b1;
+  --background-bg: #393939;
+  --disabled: #888686;
   --text-color: #fff;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
 }
 
 html {
@@ -44,9 +54,21 @@ html {
   margin-bottom: 0;
 }
 
+.mt-none {
+  margin-top: 0;
+}
+
 .mx-gap {
   margin-right: calc(var(--gap) / 2);
   margin-left: calc(var(--gap) / 2);
+}
+
+.mr-auto {
+  margin-right: auto;
+}
+
+.ml-auto {
+  margin-left: auto;
 }
 
 .px-gap {

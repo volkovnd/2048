@@ -49,13 +49,13 @@ const textColor = computed(() => {
 <style scoped>
 .board-item {
   font-size: calc((var(--board-size) / 4 - var(--gap)) / 2);
-  background-color: #f0f0f0;
+  background-color: var(--secondary);
   border: 1px solid #0003;
   border-radius: 5%;
 }
 
 .board-item-disabled {
   cursor: no-drop;
-  background-color: #c8c8c8;
+  background-color: var(--disabled);
 }
 </style>

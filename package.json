@@ -16,12 +16,12 @@
     "lint:styles:fix": "stylelint \"**/*.{css,vue}\" --fix"
   },
   "dependencies": {
+    "@mdi/js": "^7.4.47",
     "normalize.css": "^8.0.1",
     "vue": "latest"
   },
   "devDependencies": {
     "@nuxt/eslint": "^0.7.0",
-    "@nuxt/icon": "^1.7.5",
     "@nuxt/test-utils": "^3.14.1",
     "@nuxtjs/color-mode": "^3.5.2",
     "@nuxtjs/google-fonts": "^3.2.0",
