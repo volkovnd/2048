@@ -1,11 +1,12 @@
+import { createArr } from "./createArr";
 import type { Item } from "@/types";
 
 export const processArrOnMoveLeft = (input: Item[]) => {
   const newRow = clone(input).filter((input) => input !== null);
 
   for (let i = 0; i < newRow.length - 1; i++) {
-    const current = newRow[i] as number;
-    const next = newRow[i + 1] as number;
+    const current = newRow[i];
+    const next = newRow[i + 1];
 
     if (current === next) {
       newRow[i] = current * 2;
@@ -14,7 +15,7 @@ export const processArrOnMoveLeft = (input: Item[]) => {
     }
   }
 
-  return newRow.concat(Array(4 - newRow.length).fill(null));
+  return ([] as Item[]).concat(newRow, createArr(4 - newRow.length, null));
 };
 
 export const processArrOnMoveRight = (input: Item[]) => {

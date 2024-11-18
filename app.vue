@@ -9,7 +9,13 @@
       </h3>
     </template>
   </AppHeader>
-  <BoardContainer>
+  <BoardContainer
+    @mouse-down.middle="
+      () => {
+        console.log('TETETTE');
+      }
+    "
+  >
     <template
       v-for="(row, x) in items"
       :key="x"
@@ -30,7 +36,7 @@ useSeoMeta({
   title: "2048"
 });
 
-const items = ref<ItemDashboard>(Array.from({ length: 4 }, () => Array(4).fill(null)));
+const items = ref<ItemDashboard>(createArr(4, createArr(4, null)));
 
 /** В каждом раунде появляется плитка номинала «2» (с вероятностью 90 %) или «4» (с вероятностью 10 %) */
 const addRandomItem = () => {
@@ -73,8 +79,10 @@ const createOnKeyHandler = (createResultFn: () => ItemDashboard) => {
 
 const onLeft = () => clone(items.value).map((row) => processArrOnMoveLeft(row));
 const onRight = () => clone(items.value).map((row) => processArrOnMoveRight(row));
-const onUp = () => rotateArr(rotateArr(items.value).map((row) => processArrOnMoveLeft(row)));
-const onDown = () => rotateArr(rotateArr(items.value).map((row) => processArrOnMoveRight(row)));
+const onUp = () =>
+  rotateArrRight(rotateArrRight(items.value).map((row) => processArrOnMoveLeft(row)));
+const onDown = () =>
+  rotateArrRight(rotateArrRight(items.value).map((row) => processArrOnMoveRight(row)));
 
 onKeyStroke("ArrowLeft", createOnKeyHandler(onLeft));
 onKeyStroke("ArrowRight", createOnKeyHandler(onRight));
@@ -92,7 +100,7 @@ onMounted(() => {
 });
 
 const reset = () => {
-  items.value = Array.from({ length: 4 }, () => Array(4).fill(null));
+  items.value = createArr(4, createArr(4, null));
 
   addRandomItem();
 
