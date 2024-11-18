@@ -33,7 +33,7 @@ defineEmits<{
 
 .ui-button {
   padding: 0.5rem 1rem;
-  font-size: max(1rem, calc(20 * (100vmin / 1000)));
+  font-size: max(0.875rem, calc(20 * (100vmin / 1000)));
   font-weight: 400;
   line-height: 1.25;
   color: white;

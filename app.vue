@@ -3,7 +3,7 @@
     <template #status>
       <h3
         v-if="isFinished"
-        style="font-size: 40px; text-align: center"
+        style="font-size: max(3.5vmin, 1rem); text-align: center"
       >
         Игра закончена!
       </h3>
@@ -32,6 +32,7 @@ useSeoMeta({
 
 const items = ref<ItemDashboard>(Array.from({ length: 4 }, () => Array(4).fill(null)));
 
+/** В каждом раунде появляется плитка номинала «2» (с вероятностью 90 %) или «4» (с вероятностью 10 %) */
 const addRandomItem = () => {
   const emptyItems: Array<{ x: number; y: number }> = [];
 
@@ -45,7 +46,11 @@ const addRandomItem = () => {
 
   const randIndex = randomInt(emptyItems.length - 1);
 
-  items.value[emptyItems[randIndex].y][emptyItems[randIndex].x] = Math.pow(2, randomInt(2, 1));
+  const val = randomInt(10, 0) < 9 ? 2 : 4;
+
+  const { x, y } = emptyItems[randIndex];
+
+  items.value[y][x] = val;
 };
 
 const isAllowedAction = (action: () => ItemDashboard) => {
