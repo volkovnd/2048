@@ -14,6 +14,18 @@
     "**/.eslintcache": true
   },
 
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/bower_components": true,
+    "**/*.code-search": true,
+    "**/*-lock.json": true,
+    "**/dist": true,
+    "**/.nuxt": true,
+    "**/.output": true,
+    "**/.stylelintcache": true,
+    "**/.eslintcache": true
+  },
+
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
 
