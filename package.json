@@ -36,6 +36,7 @@
     "stylelint-config-recess-order": "^5.1.1",
     "stylelint-config-recommended": "^14.0.1",
     "stylelint-config-recommended-vue": "^1.5.0",
+    "vite-plugin-eslint2": "^5.0.2",
     "vitest": "^2.0.5"
   }
 }

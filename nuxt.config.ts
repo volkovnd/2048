@@ -53,6 +53,10 @@ export default defineNuxtConfig({
 
   compatibilityDate: "2024-04-03",
 
+  eslint: {
+    checker: true
+  },
+
   stylelint: {
     exclude: [
       "**/node_modules/**",

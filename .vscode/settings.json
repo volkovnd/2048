@@ -10,7 +10,8 @@
     "**/*-lock.json": true,
     "**/.nuxt": true,
     "**/.output": true,
-    "**/.stylelintcache": true
+    "**/.stylelintcache": true,
+    "**/.eslintcache": true
   },
 
   "editor.defaultFormatter": "esbenp.prettier-vscode",
