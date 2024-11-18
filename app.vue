@@ -7,6 +7,13 @@
       >
         Игра закончена!
       </h3>
+
+      <h3
+        v-else
+        style="font-size: max(3.5vmin, 1rem); text-align: center"
+      >
+        Результат: {{ result }}
+      </h3>
     </template>
   </AppHeader>
   <BoardContainer
@@ -36,7 +43,15 @@ useSeoMeta({
   title: "2048"
 });
 
-const items = ref<ItemDashboard>(createArr(4, () => createArr(4, null)));
+const items = ref<ItemDashboard>(
+  Array.from({ length: 4 }, () => Array.from({ length: 4 }, () => null))
+);
+
+const result = ref(0);
+
+const addToResult = (value: number) => {
+  result.value += value;
+};
 
 /** В каждом раунде появляется плитка номинала «2» (с вероятностью 90 %) или «4» (с вероятностью 10 %) */
 const addRandomItem = () => {
@@ -77,22 +92,23 @@ const createOnKeyHandler = (createResultFn: () => ItemDashboard) => {
   };
 };
 
-const onLeft = () => clone(items.value).map((row) => processArrOnMoveLeft(row));
-const onRight = () => clone(items.value).map((row) => processArrOnMoveRight(row));
-const onUp = () =>
-  rotateArrRight(rotateArrLeft(items.value).map((row) => processArrOnMoveLeft(row)));
-const onDown = () =>
-  rotateArrRight(rotateArrLeft(items.value).map((row) => processArrOnMoveRight(row)));
+const onLeft = (cb?: (value: number) => void) => () => processArrOnMoveLeft(clone(items.value), cb);
+const onRight = (cb?: (value: number) => void) => () =>
+  processArrOnMoveRight(clone(items.value), cb);
+const onUp = (cb?: (value: number) => void) => () =>
+  rotateArrRight(processArrOnMoveLeft(rotateArrLeft(clone(items.value)), cb));
+const onDown = (cb?: (value: number) => void) => () =>
+  rotateArrRight(processArrOnMoveRight(rotateArrLeft(clone(items.value)), cb));
 
-onKeyStroke("ArrowLeft", createOnKeyHandler(onLeft));
-onKeyStroke("ArrowRight", createOnKeyHandler(onRight));
-onKeyStroke("ArrowUp", createOnKeyHandler(onUp));
-onKeyStroke("ArrowDown", createOnKeyHandler(onDown));
+onKeyStroke("ArrowLeft", createOnKeyHandler(onLeft(addToResult)));
+onKeyStroke("ArrowRight", createOnKeyHandler(onRight(addToResult)));
+onKeyStroke("ArrowUp", createOnKeyHandler(onUp(addToResult)));
+onKeyStroke("ArrowDown", createOnKeyHandler(onDown(addToResult)));
 
 const isFinished = ref(false);
 
 watch(items, () => {
-  isFinished.value = [onLeft, onRight, onUp, onDown].every((fn) => !isAllowedAction(fn));
+  isFinished.value = [onLeft, onRight, onUp, onDown].every((fn) => !isAllowedAction(fn()));
 });
 
 onMounted(() => {
@@ -100,9 +116,11 @@ onMounted(() => {
 });
 
 const reset = () => {
-  items.value = createArr(4, () => createArr(4, null));
+  items.value = Array.from({ length: 4 }, () => Array.from({ length: 4 }, () => null));
 
   addRandomItem();
+
+  result.value = 0;
 
   isFinished.value = false;
 };
