@@ -29,7 +29,8 @@ export default defineNuxtConfig({
     "@nuxtjs/stylelint-module",
     "@vueuse/nuxt",
     "@nuxt/test-utils",
-    "@nuxtjs/color-mode"
+    "@nuxtjs/color-mode",
+    "@nuxt/icon"
   ],
 
   googleFonts: {
@@ -84,12 +85,11 @@ export default defineNuxtConfig({
   },
   experimental: {
     appManifest: false,
-    renderJsonPayloads: false
+    renderJsonPayloads: false,
+    componentIslands: false
   },
-  logLevel: "verbose",
-  unhead: {
-    renderSSRHeadOptions: {
-      omitLineBreaks: true
-    }
+  icon: {
+    provider: "iconify",
+    serverBundle: false
   }
 });

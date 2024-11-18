@@ -1,5 +1,5 @@
 :root {
-  --header-height: 5rem;
+  --header-height: calc(2.25rem + var(--gap));
   --gap: max(2vmin, 1rem);
   --board-size: calc(100vmin - var(--header-height));
   --background-bg: #fff;
@@ -29,14 +29,43 @@ html {
   margin-left: auto;
 }
 
+.my-gap {
+  margin-top: calc(var(--gap) / 2);
+  margin-bottom: calc(var(--gap) / 2);
+}
+
+.my-auto {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.my-none {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
 .mx-gap {
   margin-right: calc(var(--gap) / 2);
   margin-left: calc(var(--gap) / 2);
 }
 
+.px-gap {
+  padding-right: calc(var(--gap) / 2);
+  padding-left: calc(var(--gap) / 2);
+}
+
+.py-gap {
+  padding-top: calc(var(--gap) / 2);
+  padding-bottom: calc(var(--gap) / 2);
+}
+
 .row {
   display: flex;
   flex-wrap: nowrap;
+}
+
+.row-gap {
+  gap: var(--gap);
 }
 
 .row-center {

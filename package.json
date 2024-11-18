@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "@nuxt/eslint": "^0.7.0",
+    "@nuxt/icon": "^1.7.5",
     "@nuxt/test-utils": "^3.14.1",
     "@nuxtjs/color-mode": "^3.5.2",
     "@nuxtjs/google-fonts": "^3.2.0",

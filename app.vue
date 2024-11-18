@@ -3,7 +3,12 @@
     <AppHeader @reset="reset">
       <template #status>
         <ClientOnly>
-          <h3 style="font-size: max(3.5vmin, 1rem); text-align: center">Результат: {{ result }}</h3>
+          <h3
+            style="font-size: max(3.5vmin, 1rem); text-align: center"
+            class="my-auto"
+          >
+            Результат: {{ result }}
+          </h3>
           <h3
             v-if="isFinished"
             style="
