@@ -8,12 +8,13 @@ describe("createArr", () => {
 
     expect(createArr(size, value)).toEqual([2, 2, 2, 2]);
   });
+
   it("create multi Arr", () => {
     const xSize = 4;
     const ySize = 4;
     const value = 2;
 
-    expect(createArr(ySize, createArr(xSize, value))).toEqual([
+    expect(createArr(ySize, () => createArr(xSize, value))).toEqual([
       [2, 2, 2, 2],
       [2, 2, 2, 2],
       [2, 2, 2, 2],

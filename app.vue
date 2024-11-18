@@ -36,7 +36,7 @@ useSeoMeta({
   title: "2048"
 });
 
-const items = ref<ItemDashboard>(createArr(4, createArr(4, null)));
+const items = ref<ItemDashboard>(createArr(4, () => createArr(4, null)));
 
 /** В каждом раунде появляется плитка номинала «2» (с вероятностью 90 %) или «4» (с вероятностью 10 %) */
 const addRandomItem = () => {
@@ -80,9 +80,9 @@ const createOnKeyHandler = (createResultFn: () => ItemDashboard) => {
 const onLeft = () => clone(items.value).map((row) => processArrOnMoveLeft(row));
 const onRight = () => clone(items.value).map((row) => processArrOnMoveRight(row));
 const onUp = () =>
-  rotateArrRight(rotateArrRight(items.value).map((row) => processArrOnMoveLeft(row)));
+  rotateArrRight(rotateArrLeft(items.value).map((row) => processArrOnMoveLeft(row)));
 const onDown = () =>
-  rotateArrRight(rotateArrRight(items.value).map((row) => processArrOnMoveRight(row)));
+  rotateArrRight(rotateArrLeft(items.value).map((row) => processArrOnMoveRight(row)));
 
 onKeyStroke("ArrowLeft", createOnKeyHandler(onLeft));
 onKeyStroke("ArrowRight", createOnKeyHandler(onRight));
@@ -100,7 +100,7 @@ onMounted(() => {
 });
 
 const reset = () => {
-  items.value = createArr(4, createArr(4, null));
+  items.value = createArr(4, () => createArr(4, null));
 
   addRandomItem();
 
