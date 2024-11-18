@@ -60,7 +60,15 @@ export default defineNuxtConfig({
       "**/.nuxt/**",
       "**/.output/**",
       "**/.vscode/**",
+      "**/public/**",
       "virtual:"
-    ]
+    ],
+    config: {
+      extends: [
+        "stylelint-config-recommended",
+        "stylelint-config-recommended-vue",
+        "stylelint-config-recess-order"
+      ]
+    }
   }
 });
