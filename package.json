@@ -5,6 +5,7 @@
   "license": "MIT",
   "private": true,
   "homepage": "https://volkovnd.github.io/2048/",
+  "description": "Nuxt version of 2048 game",
   "type": "module",
   "scripts": {
     "build": "nuxt build",
