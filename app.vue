@@ -23,14 +23,12 @@
 
       <BoardContainer>
         <ClientOnly>
-          <template
-            v-for="(row, y) in items"
-            :key="y"
-          >
+          <template v-for="row in items">
             <BoardItem
-              v-for="(item, x) in row"
-              :key="x"
-              :value="item"
+              v-for="item in row"
+              :id="`item-${item.id}`"
+              :key="item.id"
+              :value="item.value"
               :disabled="isFinished"
             />
           </template>
@@ -49,7 +47,7 @@ const addRandomItem = (items: ItemDashboard) => {
 
   items.forEach((row, y) => {
     row.forEach((item, x) => {
-      if (item === null) {
+      if (item.value === null) {
         emptyItems.push({ x, y });
       }
     });
@@ -61,14 +59,17 @@ const addRandomItem = (items: ItemDashboard) => {
 
   const { x, y } = emptyItems[randIndex];
 
-  items[y][x] = val;
+  items[y][x].value = val;
 
   return items;
 };
 
 const generateInitialBoard = () => {
-  const items: ItemDashboard = Array.from({ length: 4 }, () =>
-    Array.from({ length: 4 }, () => null)
+  const items: ItemDashboard = Array.from({ length: 4 }, (_, y) =>
+    Array.from({ length: 4 }, (_, x) => ({
+      value: null,
+      id: y * 4 + x
+    }))
   );
 
   return addRandomItem(items);
