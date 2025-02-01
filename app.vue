@@ -43,10 +43,6 @@
 <script setup lang="ts">
 import type { ItemDashboard } from "@/types";
 
-useHead({
-  title: "2048"
-});
-
 const generateInitialBoard = () => {
   const items = Array.from({ length: 4 }, () =>
     Array.from({ length: 4 }, () => null)
