@@ -19,3 +19,13 @@ export const transformColumnsToDashboard = (columns: ItemColumn[]) => {
 export const transformRowsToDashboard = (rows: ItemRow[]) => {
   return Array.from({ length: 16 }, (_, i) => rows[Math.floor(i / 4)][i % 4]);
 };
+
+export const mapRows = (items: ItemDashboard, fn: (item: ItemRow) => ItemRow) => {
+  return transformRowsToDashboard(transformmDashboardToRows(items).map((row) => fn(row)));
+};
+
+export const mapColumns = (items: ItemDashboard, fn: (item: ItemColumn) => ItemColumn) => {
+  return transformColumnsToDashboard(
+    transformDashboardToColumns(items).map((column) => fn(column))
+  );
+};

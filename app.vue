@@ -24,11 +24,15 @@
       <BoardContainer>
         <ClientOnly>
           <BoardItem
-            v-for="item in items"
+            v-for="item in computedItems"
             :id="`item-${item.id}`"
             :key="item.id"
             :value="item.value"
             :disabled="isFinished"
+            :style="{
+              left: `calc(${item.x} * (var(--board-item-size) + var(--gap)) + var(--gap))`,
+              top: `calc(${item.y} * (var(--board-item-size) + var(--gap)) + var(--gap))`
+            }"
           />
         </ClientOnly>
       </BoardContainer>
@@ -52,16 +56,21 @@ const addRandomItem = (items: ItemDashboard) => {
   return items;
 };
 
-const generateInitialBoard = () => {
-  const items: ItemDashboard = Array.from({ length: 16 }, (_, i) => ({
-    value: null,
-    id: i
-  }));
-
-  return addRandomItem(items);
-};
+const generateInitialBoard = (): ItemDashboard =>
+  addRandomItem(
+    Array.from({ length: 16 }, (_, i) => ({
+      value: null,
+      id: i
+    }))
+  );
 
 const items = useSessionStorage<ItemDashboard>("2048-items", generateInitialBoard());
+
+const computedItems = computed(() =>
+  items.value
+    .map((item, index) => ({ ...item, x: index % 4, y: Math.floor(index / 4) }))
+    .sort((a, b) => a.id - b.id)
+);
 
 const result = ref(0);
 
@@ -86,21 +95,16 @@ const createOnKeyHandler = (createResultFn: () => ItemDashboard) => {
 };
 
 const onLeft = (cb?: (value: number) => void) => () =>
-  transformRowsToDashboard(
-    transformmDashboardToRows(items.value).map((row) => processArrOnMoveLeft(row, cb))
-  );
+  mapRows(items.value, (row) => processArrOnMoveLeft(row, cb));
+
 const onRight = (cb?: (value: number) => void) => () =>
-  transformRowsToDashboard(
-    transformmDashboardToRows(items.value).map((row) => processArrOnMoveRight(row, cb))
-  );
+  mapRows(items.value, (row) => processArrOnMoveRight(row, cb));
+
 const onUp = (cb?: (value: number) => void) => () =>
-  transformColumnsToDashboard(
-    transformDashboardToColumns(items.value).map((row) => processArrOnMoveLeft(row, cb))
-  );
+  mapColumns(items.value, (column) => processArrOnMoveLeft(column, cb));
+
 const onDown = (cb?: (value: number) => void) => () =>
-  transformColumnsToDashboard(
-    transformDashboardToColumns(items.value).map((row) => processArrOnMoveRight(row, cb))
-  );
+  mapColumns(items.value, (column) => processArrOnMoveRight(column, cb));
 
 onKeyStroke("ArrowLeft", createOnKeyHandler(onLeft(addToResult)));
 onKeyStroke("ArrowRight", createOnKeyHandler(onRight(addToResult)));
