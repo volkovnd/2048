@@ -3,7 +3,7 @@ import { isEqualBoard } from "../isEqualBoard";
 import type { ItemDashboard, ItemValue } from "~/types";
 
 const createItemFromValue = (rows: ItemValue[][]): ItemDashboard =>
-  rows.map((row) => row.map((value) => ({ id: 2, value })));
+  rows.flat().map((value) => ({ id: 2, value }));
 
 describe("isEqualArrs", () => {
   it("primitive equal arrs", () => {
