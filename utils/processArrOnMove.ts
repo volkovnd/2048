@@ -1,32 +1,51 @@
-import type { ItemDashboard, ItemRow } from "@/types";
+import type { Item } from "@/types";
 
-export const processArrOnMoveLeft = (dashboard: ItemDashboard, cb?: (value: number) => void) => {
-  return dashboard.map((row: ItemRow) => {
-    const newRow = clone(row);
-
-    newRow.sort((a, b) => (a === null ? 1 : 0) - (b === null ? 1 : 0));
-
-    for (let i = 0; i < newRow.length - 1; i++) {
-      const current = newRow[i];
-      const next = newRow[i + 1];
-
-      if (current !== null && current === next) {
-        newRow[i] = null;
-        newRow[i + 1] = current * 2;
-
-        if (cb) cb(current);
-      }
-    }
-
-    newRow.sort((a, b) => (a === null ? 1 : 0) - (b === null ? 1 : 0));
-
-    return newRow;
-  });
+const moveEmptyItems = (items: Item[], left = true) => {
+  return items.sort(
+    (a, b) => (a === null ? (left ? 1 : -1) : 0) - (b === null ? (left ? 1 : -1) : 0)
+  );
 };
 
-export const processArrOnMoveRight = (dashboard: ItemDashboard, cb?: (value: number) => void) => {
-  return processArrOnMoveLeft(
-    clone(dashboard).map((row) => row.reverse()),
-    cb
-  ).map((row) => row.reverse());
+export const processArrOnMoveLeft = (items: Item[], cb?: (value: number) => void) => {
+  const row = clone(items);
+
+  moveEmptyItems(row);
+
+  for (let i = 0; i < row.length - 1; i++) {
+    const current = row[i];
+    const next = row[i + 1];
+
+    if (current !== null && current === next) {
+      row[i] = null;
+      row[i + 1] = current * 2;
+
+      if (cb) cb(current);
+    }
+  }
+
+  moveEmptyItems(row);
+
+  return row;
+};
+
+export const processArrOnMoveRight = (items: Item[], cb?: (value: number) => void) => {
+  const row = clone(items);
+
+  moveEmptyItems(row, false);
+
+  for (let i = row.length - 1; i > 1; i--) {
+    const current = row[i];
+    const next = row[i - 1];
+
+    if (current !== null && current === next) {
+      row[i] = null;
+      row[i - 1] = current * 2;
+
+      if (cb) cb(current);
+    }
+  }
+
+  moveEmptyItems(row, false);
+
+  return row;
 };

@@ -103,13 +103,14 @@ const createOnKeyHandler = (createResultFn: () => ItemDashboard) => {
   };
 };
 
-const onLeft = (cb?: (value: number) => void) => () => processArrOnMoveLeft(clone(items.value), cb);
+const onLeft = (cb?: (value: number) => void) => () =>
+  items.value.map((row) => processArrOnMoveLeft(row, cb));
 const onRight = (cb?: (value: number) => void) => () =>
-  processArrOnMoveRight(clone(items.value), cb);
+  items.value.map((row) => processArrOnMoveRight(row, cb));
 const onUp = (cb?: (value: number) => void) => () =>
-  rotateArrRight(processArrOnMoveLeft(rotateArrLeft(clone(items.value)), cb));
+  rotateArrRight(rotateArrLeft(items.value).map((row) => processArrOnMoveLeft(row, cb)));
 const onDown = (cb?: (value: number) => void) => () =>
-  rotateArrRight(processArrOnMoveRight(rotateArrLeft(clone(items.value)), cb));
+  rotateArrRight(rotateArrLeft(items.value).map((row) => processArrOnMoveRight(row, cb)));
 
 onKeyStroke("ArrowLeft", createOnKeyHandler(onLeft(addToResult)));
 onKeyStroke("ArrowRight", createOnKeyHandler(onRight(addToResult)));
