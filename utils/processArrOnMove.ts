@@ -1,22 +1,26 @@
-import { createArr } from "./createArr";
-import type { Item, ItemDashboard, ItemRow } from "@/types";
+import type { ItemDashboard, ItemRow } from "@/types";
 
 export const processArrOnMoveLeft = (dashboard: ItemDashboard, cb?: (value: number) => void) => {
   return dashboard.map((row: ItemRow) => {
-    const newRow = clone(row).filter((input) => input !== null);
+    const newRow = clone(row);
+
+    newRow.sort((a, b) => (a === null ? 1 : 0) - (b === null ? 1 : 0));
 
     for (let i = 0; i < newRow.length - 1; i++) {
       const current = newRow[i];
       const next = newRow[i + 1];
 
-      if (current === next) {
-        newRow.splice(i, 2, current * 2);
+      if (current !== null && current === next) {
+        newRow[i] = null;
+        newRow[i + 1] = current * 2;
 
-        if (cb) cb(newRow[i]);
+        if (cb) cb(current);
       }
     }
 
-    return ([] as Item[]).concat(newRow, createArr(4 - newRow.length, null));
+    newRow.sort((a, b) => (a === null ? 1 : 0) - (b === null ? 1 : 0));
+
+    return newRow;
   });
 };
 
