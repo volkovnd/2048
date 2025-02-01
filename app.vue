@@ -24,12 +24,12 @@
       <BoardContainer>
         <ClientOnly>
           <template
-            v-for="(row, x) in items"
-            :key="x"
+            v-for="(row, y) in items"
+            :key="y"
           >
             <BoardItem
-              v-for="(item, y) in row"
-              :key="y"
+              v-for="(item, x) in row"
+              :key="x"
               :value="item"
               :disabled="isFinished"
             />
@@ -43,32 +43,11 @@
 <script setup lang="ts">
 import type { ItemDashboard } from "@/types";
 
-const generateInitialBoard = () => {
-  const items = Array.from({ length: 4 }, () =>
-    Array.from({ length: 4 }, () => null)
-  ) as ItemDashboard;
-
-  const x = randomInt(3);
-  const y = randomInt(3);
-
-  items[y][x] = randomInt(10, 0) < 9 ? 2 : 4;
-
-  return items;
-};
-
-const items = useSessionStorage<ItemDashboard>("2048-items", generateInitialBoard());
-
-const result = ref(0);
-
-const addToResult = (value: number) => {
-  result.value += value;
-};
-
 /** В каждом раунде появляется плитка номинала «2» (с вероятностью 90 %) или «4» (с вероятностью 10 %) */
-const addRandomItem = () => {
+const addRandomItem = (items: ItemDashboard) => {
   const emptyItems: Array<{ x: number; y: number }> = [];
 
-  items.value.forEach((row, y) => {
+  items.forEach((row, y) => {
     row.forEach((item, x) => {
       if (item === null) {
         emptyItems.push({ x, y });
@@ -82,7 +61,25 @@ const addRandomItem = () => {
 
   const { x, y } = emptyItems[randIndex];
 
-  items.value[y][x] = val;
+  items[y][x] = val;
+
+  return items;
+};
+
+const generateInitialBoard = () => {
+  const items: ItemDashboard = Array.from({ length: 4 }, () =>
+    Array.from({ length: 4 }, () => null)
+  );
+
+  return addRandomItem(items);
+};
+
+const items = useSessionStorage<ItemDashboard>("2048-items", generateInitialBoard());
+
+const result = ref(0);
+
+const addToResult = (value: number) => {
+  result.value += value;
 };
 
 const isAllowedAction = (action: () => ItemDashboard) => {
@@ -96,9 +93,7 @@ const createOnKeyHandler = (createResultFn: () => ItemDashboard) => {
     const result = createResultFn();
 
     if (!isEqualBoard(result, items.value)) {
-      items.value = result;
-
-      addRandomItem();
+      items.value = addRandomItem(result);
     }
   };
 };
@@ -108,9 +103,13 @@ const onLeft = (cb?: (value: number) => void) => () =>
 const onRight = (cb?: (value: number) => void) => () =>
   items.value.map((row) => processArrOnMoveRight(row, cb));
 const onUp = (cb?: (value: number) => void) => () =>
-  rotateArrRight(rotateArrLeft(items.value).map((row) => processArrOnMoveLeft(row, cb)));
+  transformColumnsToRows(
+    transformRowsToColumns(items.value).map((row) => processArrOnMoveLeft(row, cb))
+  );
 const onDown = (cb?: (value: number) => void) => () =>
-  rotateArrRight(rotateArrLeft(items.value).map((row) => processArrOnMoveRight(row, cb)));
+  transformColumnsToRows(
+    transformRowsToColumns(items.value).map((row) => processArrOnMoveRight(row, cb))
+  );
 
 onKeyStroke("ArrowLeft", createOnKeyHandler(onLeft(addToResult)));
 onKeyStroke("ArrowRight", createOnKeyHandler(onRight(addToResult)));

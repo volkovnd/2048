@@ -9,10 +9,10 @@
 </template>
 
 <script setup lang="ts">
-import type { Item } from "~/types";
+import type { ItemValue } from "~/types";
 
 const props = defineProps<{
-  value: Item;
+  value: ItemValue;
   disabled?: boolean;
 }>();
 
