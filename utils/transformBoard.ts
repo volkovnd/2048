@@ -1,9 +1,21 @@
-import type { ItemDashboard } from "~/types";
+import type { ItemColumn, ItemDashboard, ItemRow } from "~/types";
 
-export const transformRowsToColumns = (items: ItemDashboard) => {
-  return Array.from({ length: 4 }, (_v, x) => Array.from({ length: 4 }, (_v, y) => items[y][x]));
+export const transformDashboardToColumns = (items: ItemDashboard) => {
+  return Array.from({ length: 4 }, (_v, x) =>
+    Array.from({ length: 4 }, (_v, y) => items[y * 4 + x])
+  );
 };
 
-export const transformColumnsToRows = (items: ItemDashboard) => {
-  return Array.from({ length: 4 }, (_v, y) => Array.from({ length: 4 }, (_v, x) => items[x][y]));
+export const transformmDashboardToRows = (items: ItemDashboard) => {
+  return Array.from({ length: 4 }, (_v, y) =>
+    Array.from({ length: 4 }, (_v, x) => items[x + y * 4])
+  );
+};
+
+export const transformColumnsToDashboard = (columns: ItemColumn[]) => {
+  return Array.from({ length: 16 }, (_, i) => columns[i % 4][Math.floor(i / 4)]);
+};
+
+export const transformRowsToDashboard = (rows: ItemRow[]) => {
+  return Array.from({ length: 16 }, (_, i) => rows[Math.floor(i / 4)][i % 4]);
 };

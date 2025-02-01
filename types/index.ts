@@ -4,4 +4,5 @@ export type Item = {
   value: ItemValue;
 };
 export type ItemRow = Item[];
-export type ItemDashboard = ItemRow[];
+export type ItemColumn = Item[];
+export type ItemDashboard = Item[];

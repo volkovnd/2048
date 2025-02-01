@@ -23,15 +23,13 @@
 
       <BoardContainer>
         <ClientOnly>
-          <template v-for="row in items">
-            <BoardItem
-              v-for="item in row"
-              :id="`item-${item.id}`"
-              :key="item.id"
-              :value="item.value"
-              :disabled="isFinished"
-            />
-          </template>
+          <BoardItem
+            v-for="item in items"
+            :id="`item-${item.id}`"
+            :key="item.id"
+            :value="item.value"
+            :disabled="isFinished"
+          />
         </ClientOnly>
       </BoardContainer>
     </NuxtLayout>
@@ -43,34 +41,22 @@ import type { ItemDashboard } from "@/types";
 
 /** В каждом раунде появляется плитка номинала «2» (с вероятностью 90 %) или «4» (с вероятностью 10 %) */
 const addRandomItem = (items: ItemDashboard) => {
-  const emptyItems: Array<{ x: number; y: number }> = [];
-
-  items.forEach((row, y) => {
-    row.forEach((item, x) => {
-      if (item.value === null) {
-        emptyItems.push({ x, y });
-      }
-    });
-  });
+  const emptyItems = items.filter((item) => item.value === null);
 
   const randIndex = randomInt(emptyItems.length - 1);
 
   const val = randomInt(10, 0) < 9 ? 2 : 4;
 
-  const { x, y } = emptyItems[randIndex];
-
-  items[y][x].value = val;
+  emptyItems[randIndex].value = val;
 
   return items;
 };
 
 const generateInitialBoard = () => {
-  const items: ItemDashboard = Array.from({ length: 4 }, (_, y) =>
-    Array.from({ length: 4 }, (_, x) => ({
-      value: null,
-      id: y * 4 + x
-    }))
-  );
+  const items: ItemDashboard = Array.from({ length: 16 }, (_, i) => ({
+    value: null,
+    id: i
+  }));
 
   return addRandomItem(items);
 };
@@ -100,16 +86,20 @@ const createOnKeyHandler = (createResultFn: () => ItemDashboard) => {
 };
 
 const onLeft = (cb?: (value: number) => void) => () =>
-  items.value.map((row) => processArrOnMoveLeft(row, cb));
+  transformRowsToDashboard(
+    transformmDashboardToRows(items.value).map((row) => processArrOnMoveLeft(row, cb))
+  );
 const onRight = (cb?: (value: number) => void) => () =>
-  items.value.map((row) => processArrOnMoveRight(row, cb));
+  transformRowsToDashboard(
+    transformmDashboardToRows(items.value).map((row) => processArrOnMoveRight(row, cb))
+  );
 const onUp = (cb?: (value: number) => void) => () =>
-  transformColumnsToRows(
-    transformRowsToColumns(items.value).map((row) => processArrOnMoveLeft(row, cb))
+  transformColumnsToDashboard(
+    transformDashboardToColumns(items.value).map((row) => processArrOnMoveLeft(row, cb))
   );
 const onDown = (cb?: (value: number) => void) => () =>
-  transformColumnsToRows(
-    transformRowsToColumns(items.value).map((row) => processArrOnMoveRight(row, cb))
+  transformColumnsToDashboard(
+    transformDashboardToColumns(items.value).map((row) => processArrOnMoveRight(row, cb))
   );
 
 onKeyStroke("ArrowLeft", createOnKeyHandler(onLeft(addToResult)));
