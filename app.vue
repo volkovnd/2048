@@ -117,12 +117,18 @@ const reset = () => {
   isLosed.value = false;
 };
 
-const history = ref<ItemDashboard[]>([]);
+const history = ref<{
+  items: ItemDashboard[];
+  score: number;
+}>([]);
 
 watch(
   items,
   () => {
-    history.value.push(clone(items.value));
+    history.value.push({
+      items: clone(items.value),
+      score: result.value
+    });
   },
   {
     immediate: true,
@@ -139,7 +145,8 @@ watch([z, r, control], ([z, r, ctrl]) => {
 
       history.value.splice(history.value.length - 1, 1);
 
-      items.value = prev;
+      items.value = prev.items;
+      result.value = prev.score;
     }
   } else if (r && ctrl) {
     reset();
