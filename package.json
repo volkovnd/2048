@@ -13,7 +13,6 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "gh-fix": "rimraf package-lock.json",
     "format": "prettier --write .",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",

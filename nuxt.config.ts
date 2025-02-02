@@ -47,10 +47,6 @@ export default defineNuxtConfig({
     inlineStyles: false
   },
 
-  nitro: {
-    preset: "github-pages"
-  },
-
   compatibilityDate: "2024-04-03",
 
   eslint: {
