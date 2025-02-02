@@ -23,17 +23,17 @@
 
       <BoardContainer>
         <ClientOnly>
-          <template
-            v-for="(row, x) in items"
-            :key="x"
-          >
-            <BoardItem
-              v-for="(item, y) in row"
-              :key="y"
-              :value="item"
-              :disabled="isFinished"
-            />
-          </template>
+          <BoardItem
+            v-for="item in computedItems"
+            :id="`item-${item.id}`"
+            :key="item.id"
+            :value="item.value"
+            :disabled="isFinished"
+            :style="{
+              left: `calc(${item.x} * (var(--board-item-size) + var(--gap)) + var(--gap))`,
+              top: `calc(${item.y} * (var(--board-item-size) + var(--gap)) + var(--gap))`
+            }"
+          />
         </ClientOnly>
       </BoardContainer>
     </NuxtLayout>
@@ -43,50 +43,36 @@
 <script setup lang="ts">
 import type { ItemDashboard } from "@/types";
 
-useHead({
-  title: "2048"
-});
-
-const generateInitialBoard = () => {
-  const items = Array.from({ length: 4 }, () =>
-    Array.from({ length: 4 }, () => null)
-  ) as ItemDashboard;
-
-  const x = randomInt(3);
-  const y = randomInt(3);
-
-  items[y][x] = randomInt(10, 0) < 9 ? 2 : 4;
-
-  return items;
-};
-
-const items = useSessionStorage<ItemDashboard>("2048-items", generateInitialBoard());
-
-const result = ref(0);
-
-const addToResult = (value: number) => {
-  result.value += value;
-};
-
 /** В каждом раунде появляется плитка номинала «2» (с вероятностью 90 %) или «4» (с вероятностью 10 %) */
-const addRandomItem = () => {
-  const emptyItems: Array<{ x: number; y: number }> = [];
+const addRandomItem = (items: ItemDashboard) => {
+  const result = clone(items);
 
-  items.value.forEach((row, y) => {
-    row.forEach((item, x) => {
-      if (item === null) {
-        emptyItems.push({ x, y });
-      }
-    });
-  });
+  const emptyItems = result.filter((item) => item.value === null);
 
   const randIndex = randomInt(emptyItems.length - 1);
 
   const val = randomInt(10, 0) < 9 ? 2 : 4;
 
-  const { x, y } = emptyItems[randIndex];
+  emptyItems[randIndex].value = val;
 
-  items.value[y][x] = val;
+  return result;
+};
+
+const generateInitialBoard = (): ItemDashboard =>
+  addRandomItem(Array.from({ length: 16 }, () => createItem()));
+
+const items = useSessionStorage<ItemDashboard>("2048-items", generateInitialBoard());
+
+const computedItems = computed(() =>
+  items.value
+    .map((item, index) => ({ ...item, x: getXFromIndex(index), y: getYFromIndex(index) }))
+    .sort((a, b) => a.id - b.id)
+);
+
+const result = ref(0);
+
+const addToResult = (value: number) => {
+  result.value += value;
 };
 
 const isAllowedAction = (action: () => ItemDashboard) => {
@@ -95,37 +81,39 @@ const isAllowedAction = (action: () => ItemDashboard) => {
   return !isEqualBoard(result, items.value);
 };
 
-const createOnKeyHandler = (createResultFn: () => ItemDashboard) => {
+const createOnKeyHandler = (createResultFn: (cb?: (value: number) => void) => ItemDashboard) => {
   return () => {
-    const result = createResultFn();
+    const result = createResultFn(addToResult);
 
     if (!isEqualBoard(result, items.value)) {
-      items.value = result;
-
-      addRandomItem();
+      items.value = addRandomItem(result);
     }
   };
 };
 
-const onLeft = (cb?: (value: number) => void) => () => processArrOnMoveLeft(clone(items.value), cb);
-const onRight = (cb?: (value: number) => void) => () =>
-  processArrOnMoveRight(clone(items.value), cb);
-const onUp = (cb?: (value: number) => void) => () =>
-  rotateArrRight(processArrOnMoveLeft(rotateArrLeft(clone(items.value)), cb));
-const onDown = (cb?: (value: number) => void) => () =>
-  rotateArrRight(processArrOnMoveRight(rotateArrLeft(clone(items.value)), cb));
+const onLeft = (cb?: (value: number) => void) =>
+  mapRows(items.value, (row) => processArrOnMoveLeft(row, cb));
 
-onKeyStroke("ArrowLeft", createOnKeyHandler(onLeft(addToResult)));
-onKeyStroke("ArrowRight", createOnKeyHandler(onRight(addToResult)));
-onKeyStroke("ArrowUp", createOnKeyHandler(onUp(addToResult)));
-onKeyStroke("ArrowDown", createOnKeyHandler(onDown(addToResult)));
+const onRight = (cb?: (value: number) => void) =>
+  mapRows(items.value, (row) => processArrOnMoveRight(row, cb));
+
+const onUp = (cb?: (value: number) => void) =>
+  mapColumns(items.value, (column) => processArrOnMoveLeft(column, cb));
+
+const onDown = (cb?: (value: number) => void) =>
+  mapColumns(items.value, (column) => processArrOnMoveRight(column, cb));
+
+onKeyStroke("ArrowLeft", createOnKeyHandler(onLeft));
+onKeyStroke("ArrowRight", createOnKeyHandler(onRight));
+onKeyStroke("ArrowUp", createOnKeyHandler(onUp));
+onKeyStroke("ArrowDown", createOnKeyHandler(onDown));
 
 const isFinished = ref(false);
 
 watch(
   items,
   () => {
-    isFinished.value = [onLeft, onRight, onUp, onDown].every((fn) => !isAllowedAction(fn()));
+    isFinished.value = [onLeft, onRight, onUp, onDown].every((fn) => !isAllowedAction(fn));
   },
   {
     immediate: true

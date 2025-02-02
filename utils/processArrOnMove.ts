@@ -1,28 +1,33 @@
-import { createArr } from "./createArr";
-import type { Item, ItemDashboard, ItemRow } from "@/types";
+import type { Item } from "@/types";
 
-export const processArrOnMoveLeft = (dashboard: ItemDashboard, cb?: (value: number) => void) => {
-  return dashboard.map((row: ItemRow) => {
-    const newRow = clone(row).filter((input) => input !== null);
-
-    for (let i = 0; i < newRow.length - 1; i++) {
-      const current = newRow[i];
-      const next = newRow[i + 1];
-
-      if (current === next) {
-        newRow.splice(i, 2, current * 2);
-
-        if (cb) cb(newRow[i]);
-      }
-    }
-
-    return ([] as Item[]).concat(newRow, createArr(4 - newRow.length, null));
-  });
+const moveEmptyItems = (items: Item[], left = true) => {
+  return items.sort(
+    (a, b) => (a.value === null ? (left ? 1 : -1) : 0) - (b.value === null ? (left ? 1 : -1) : 0)
+  );
 };
 
-export const processArrOnMoveRight = (dashboard: ItemDashboard, cb?: (value: number) => void) => {
-  return processArrOnMoveLeft(
-    clone(dashboard).map((row) => row.reverse()),
-    cb
-  ).map((row) => row.reverse());
+export const processArrOnMoveLeft = (items: Item[], cb?: (value: number) => void) => {
+  const row = clone(items);
+
+  moveEmptyItems(row);
+
+  for (let i = 0; i < row.length - 1; i++) {
+    const current = row[i].value;
+    const next = row[i + 1].value;
+
+    if (current !== null && current === next) {
+      row[i].value = current * 2;
+      row[i + 1].value = null;
+
+      if (cb) cb(current);
+    }
+  }
+
+  moveEmptyItems(row);
+
+  return row;
+};
+
+export const processArrOnMoveRight = (items: Item[], cb?: (value: number) => void) => {
+  return processArrOnMoveLeft(clone(items).reverse(), cb).reverse();
 };

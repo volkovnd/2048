@@ -11,6 +11,7 @@ export default defineNuxtConfig({
       htmlAttrs: {
         lang: "ru"
       },
+      title: "2048",
       link: [
         {
           rel: "icon",
@@ -42,10 +43,6 @@ export default defineNuxtConfig({
     display: "swap"
   },
 
-  typescript: {
-    strict: true
-  },
-
   features: {
     inlineStyles: false
   },
@@ -58,28 +55,5 @@ export default defineNuxtConfig({
 
   eslint: {
     checker: true
-  },
-
-  stylelint: {
-    lintOnStart: false,
-    build: true,
-    dev: false,
-
-    exclude: [
-      "**/node_modules/**",
-      "**/dist/**",
-      "**/.nuxt/**",
-      "**/.output/**",
-      "**/.vscode/**",
-      "**/public/**",
-      "virtual:"
-    ],
-    config: {
-      extends: [
-        "stylelint-config-recommended",
-        "stylelint-config-recommended-vue",
-        "stylelint-config-recess-order"
-      ]
-    }
   }
 });
