@@ -3,18 +3,28 @@
     class="ui-button"
     :type="type"
   >
-    <UiIcon
+    <svg
       v-if="icon"
-      :path="icon"
-      :size="24"
-      style="display: block"
-    />
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      :width="24"
+      :height="24"
+    >
+      <path
+        :d="icon"
+        fill="currentColor"
+      />
+    </svg>
+
     <slot />
   </button>
 </template>
 
 <script lang="ts" setup>
-defineProps<{ type?: "button"; icon?: string }>();
+defineProps<{
+  type?: "button";
+  icon?: string;
+}>();
 </script>
 
 <style scoped>

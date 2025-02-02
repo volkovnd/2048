@@ -1,31 +1,31 @@
 <template>
-  <div>
-    <NuxtLayout>
-      <UiContainer>
-        <AppHeader
-          :score="result"
-          :result="isFinished ? 'Игра закончена!' : ''"
-          @reset="reset"
+  <div style="width: 100vw; height: 100vh">
+    <AppHeader
+      :score="result"
+      :result="isFinished ? 'Игра закончена!' : ''"
+      class="container"
+      @reset="reset"
+    />
+    <div
+      id="board"
+      class="container"
+    >
+      <ClientOnly>
+        <BoardItem
+          v-for="item in computedItems"
+          :id="`item-${item.id}`"
+          :key="item.id"
+          :value="item.value"
+          :disabled="isFinished"
+          :style="{
+            left: `calc(${item.x} * (var(--board-item-size) + var(--spacing)) + var(--spacing))`,
+            top: `calc(${item.y} * (var(--board-item-size) + var(--spacing)) + var(--spacing))`
+          }"
         />
-
-        <BoardContainer>
-          <ClientOnly>
-            <BoardItem
-              v-for="item in computedItems"
-              :id="`item-${item.id}`"
-              :key="item.id"
-              :value="item.value"
-              :disabled="isFinished"
-              :style="{
-                left: `calc(${item.x} * (var(--board-item-size) + var(--spacing)))`,
-                top: `calc(${item.y} * (var(--board-item-size) + var(--spacing)))`
-              }"
-            />
-          </ClientOnly>
-        </BoardContainer>
-      </UiContainer>
-    </NuxtLayout>
+      </ClientOnly>
+    </div>
   </div>
+  <div />
 </template>
 
 <script setup lang="ts">
@@ -123,10 +123,11 @@ const reset = () => {
 :root {
   --header-height: calc(4rem);
 
-  --spacing: max(2vmin, 1rem);
+  --spacing: 1rem;
 
-  --board-size: calc(100vh - var(--header-height));
-  --board-item-size: calc((var(--board-size) - 3 * var(--spacing)) / 4);
+  --board-size: min(calc(100vw), calc(100vh - var(--header-height)));
+
+  --board-item-size: calc((var(--board-size) - 5 * var(--spacing)) / 4);
 
   --background-bg: #fff;
   --text-color: #000;
@@ -163,5 +164,25 @@ body {
 *::before,
 *::after {
   box-sizing: border-box;
+}
+
+.container {
+  width: 100%;
+  max-width: calc(var(--board-size));
+
+  padding-right: var(--spacing);
+  padding-left: var(--spacing);
+
+  margin-right: auto;
+  margin-left: auto;
+}
+
+#board {
+  position: relative;
+
+  width: var(--board-size);
+  height: var(--board-size);
+
+  padding: var(--spacing);
 }
 </style>
