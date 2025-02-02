@@ -2,7 +2,7 @@
   <div style="width: 100vw; height: 100vh">
     <AppHeader
       :score="result"
-      :result="isFinished ? 'Игра закончена!' : ''"
+      :result="isWinned ? 'Вы победили!' : isLosed ? 'Игра закончена!' : ''"
       class="container"
       @reset="reset"
     />
@@ -16,11 +16,8 @@
           :id="`item-${item.id}`"
           :key="item.id"
           :value="item.value"
-          :disabled="isFinished"
-          :style="{
-            left: `calc(${item.x} * (var(--board-item-size) + var(--spacing)) + var(--spacing))`,
-            top: `calc(${item.y} * (var(--board-item-size) + var(--spacing)) + var(--spacing))`
-          }"
+          :disabled="isLosed || isWinned"
+          :position="item.position"
         />
       </ClientOnly>
     </div>
@@ -53,7 +50,10 @@ const items = useSessionStorage<ItemDashboard>("2048-items", generateInitialBoar
 
 const computedItems = computed(() =>
   items.value
-    .map((item, index) => ({ ...item, x: getXFromIndex(index), y: getYFromIndex(index) }))
+    .map((item, index) => ({
+      ...item,
+      position: { x: getXFromIndex(index), y: getYFromIndex(index) }
+    }))
     .sort((a, b) => a.id - b.id)
 );
 
@@ -96,12 +96,13 @@ onKeyStroke("ArrowRight", createOnKeyHandler(onRight));
 onKeyStroke("ArrowUp", createOnKeyHandler(onUp));
 onKeyStroke("ArrowDown", createOnKeyHandler(onDown));
 
-const isFinished = ref(false);
+const isWinned = computed(() => items.value.some((item) => item.value === 2048));
+const isLosed = ref(false);
 
 watch(
   items,
   () => {
-    isFinished.value = [onLeft, onRight, onUp, onDown].every((fn) => !isAllowedAction(fn));
+    isLosed.value = [onLeft, onRight, onUp, onDown].every((fn) => !isAllowedAction(fn));
   },
   {
     immediate: true
@@ -113,7 +114,7 @@ const reset = () => {
 
   result.value = 0;
 
-  isFinished.value = false;
+  isLosed.value = false;
 };
 
 const history = ref<ItemDashboard[]>([]);

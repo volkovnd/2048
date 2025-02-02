@@ -2,7 +2,11 @@
   <div
     class="board-item"
     :class="{ 'board-item-disabled': disabled, 'empty': !value }"
-    :style="{ color: textColor }"
+    :style="{
+      color: textColor,
+      left: `calc(${position.x} * (var(--board-item-size) + var(--spacing)) + var(--spacing))`,
+      top: `calc(${position.y} * (var(--board-item-size) + var(--spacing)) + var(--spacing))`
+    }"
   >
     <div
       v-if="value"
@@ -14,10 +18,11 @@
 </template>
 
 <script setup lang="ts">
-import type { ItemValue } from "~/types";
+import type { ItemValue, ItemPosition } from "~/types";
 
 const props = defineProps<{
   value: ItemValue;
+  position: ItemPosition;
   disabled?: boolean;
 }>();
 
@@ -60,7 +65,7 @@ const textColor = computed(() => {
   justify-content: center;
   width: var(--board-item-size);
   height: var(--board-item-size);
-  font-size: calc(var(--board-item-size) / 2);
+  font-size: calc(var(--board-item-size) / 3);
   background-color: var(--secondary);
   border: 1px solid #0003;
   border-radius: 5%;
