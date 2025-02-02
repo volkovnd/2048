@@ -115,6 +115,35 @@ const reset = () => {
 
   isFinished.value = false;
 };
+
+const history = ref<ItemDashboard[]>([]);
+
+watch(
+  items,
+  () => {
+    history.value.push(clone(items.value));
+  },
+  {
+    immediate: true,
+    deep: true
+  }
+);
+
+const { z, control } = useMagicKeys();
+
+watch([z, control], ([z, ctrl]) => {
+  if (z && ctrl) {
+    if (history.value.length > 1) {
+      console.log("undo");
+
+      const prev = history.value[history.value.length - 2];
+
+      history.value.splice(history.value.length - 1, 1);
+
+      items.value = prev;
+    }
+  }
+});
 </script>
 
 <style lang="css">
