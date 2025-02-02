@@ -15,7 +15,8 @@ jobs:
         with:
           node-version: "20"
       # Pick your own package manager and build script
-      - run: npm ci
+      - run: npm run gh-fix
+      - run: npm install
       - run: npx nuxt build --preset github_pages
         env:
           NUXT_APP_BASE_URL: /2048/
