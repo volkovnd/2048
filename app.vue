@@ -45,7 +45,9 @@ import type { ItemDashboard } from "@/types";
 
 /** В каждом раунде появляется плитка номинала «2» (с вероятностью 90 %) или «4» (с вероятностью 10 %) */
 const addRandomItem = (items: ItemDashboard) => {
-  const emptyItems = items.filter((item) => item.value === null);
+  const result = clone(items);
+
+  const emptyItems = result.filter((item) => item.value === null);
 
   const randIndex = randomInt(emptyItems.length - 1);
 
@@ -53,22 +55,17 @@ const addRandomItem = (items: ItemDashboard) => {
 
   emptyItems[randIndex].value = val;
 
-  return items;
+  return result;
 };
 
 const generateInitialBoard = (): ItemDashboard =>
-  addRandomItem(
-    Array.from({ length: 16 }, (_, i) => ({
-      value: null,
-      id: i
-    }))
-  );
+  addRandomItem(Array.from({ length: 16 }, () => createItem()));
 
 const items = useSessionStorage<ItemDashboard>("2048-items", generateInitialBoard());
 
 const computedItems = computed(() =>
   items.value
-    .map((item, index) => ({ ...item, x: index % 4, y: Math.floor(index / 4) }))
+    .map((item, index) => ({ ...item, x: getXFromIndex(index), y: getYFromIndex(index) }))
     .sort((a, b) => a.id - b.id)
 );
 
@@ -84,9 +81,9 @@ const isAllowedAction = (action: () => ItemDashboard) => {
   return !isEqualBoard(result, items.value);
 };
 
-const createOnKeyHandler = (createResultFn: () => ItemDashboard) => {
+const createOnKeyHandler = (createResultFn: (cb?: (value: number) => void) => ItemDashboard) => {
   return () => {
-    const result = createResultFn();
+    const result = createResultFn(addToResult);
 
     if (!isEqualBoard(result, items.value)) {
       items.value = addRandomItem(result);
@@ -94,29 +91,29 @@ const createOnKeyHandler = (createResultFn: () => ItemDashboard) => {
   };
 };
 
-const onLeft = (cb?: (value: number) => void) => () =>
+const onLeft = (cb?: (value: number) => void) =>
   mapRows(items.value, (row) => processArrOnMoveLeft(row, cb));
 
-const onRight = (cb?: (value: number) => void) => () =>
+const onRight = (cb?: (value: number) => void) =>
   mapRows(items.value, (row) => processArrOnMoveRight(row, cb));
 
-const onUp = (cb?: (value: number) => void) => () =>
+const onUp = (cb?: (value: number) => void) =>
   mapColumns(items.value, (column) => processArrOnMoveLeft(column, cb));
 
-const onDown = (cb?: (value: number) => void) => () =>
+const onDown = (cb?: (value: number) => void) =>
   mapColumns(items.value, (column) => processArrOnMoveRight(column, cb));
 
-onKeyStroke("ArrowLeft", createOnKeyHandler(onLeft(addToResult)));
-onKeyStroke("ArrowRight", createOnKeyHandler(onRight(addToResult)));
-onKeyStroke("ArrowUp", createOnKeyHandler(onUp(addToResult)));
-onKeyStroke("ArrowDown", createOnKeyHandler(onDown(addToResult)));
+onKeyStroke("ArrowLeft", createOnKeyHandler(onLeft));
+onKeyStroke("ArrowRight", createOnKeyHandler(onRight));
+onKeyStroke("ArrowUp", createOnKeyHandler(onUp));
+onKeyStroke("ArrowDown", createOnKeyHandler(onDown));
 
 const isFinished = ref(false);
 
 watch(
   items,
   () => {
-    isFinished.value = [onLeft, onRight, onUp, onDown].every((fn) => !isAllowedAction(fn()));
+    isFinished.value = [onLeft, onRight, onUp, onDown].every((fn) => !isAllowedAction(fn));
   },
   {
     immediate: true

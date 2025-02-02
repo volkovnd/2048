@@ -4,7 +4,12 @@
     :class="{ 'board-item-disabled': disabled, 'empty': !value }"
     :style="{ color: textColor }"
   >
-    {{ value }}
+    <div
+      v-if="value"
+      class="board-item-value"
+    >
+      {{ value }}
+    </div>
   </div>
 </template>
 
@@ -52,7 +57,7 @@ const textColor = computed(() => {
   z-index: 3;
   width: var(--board-item-size);
   height: var(--board-item-size);
-  font-size: calc((var(--board-size) / 4 - var(--gap)) / 2);
+  font-size: calc(var(--board-item-size) / 2);
   background-color: var(--secondary);
   border: 1px solid #0003;
   border-radius: 5%;
@@ -62,6 +67,22 @@ const textColor = computed(() => {
 .board-item.empty {
   z-index: 2;
   transition: none;
+}
+
+@keyframes new-value {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.board-item-value {
+  animation: new-value 0.4s ease-in-out;
 }
 
 .board-item-disabled {
