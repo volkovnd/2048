@@ -48,8 +48,8 @@ const generateInitialBoard = (): ItemDashboard =>
 
 const items = useSessionStorage<ItemDashboard>("2048-items", generateInitialBoard());
 
-const computedItems = computed(() =>
-  items.value
+const computedItems = computed<Item & { position: ItemPosition }>(() =>
+  clone(items.value)
     .map((item, index) => ({
       ...item,
       position: { x: getXFromIndex(index), y: getYFromIndex(index) }
@@ -130,9 +130,9 @@ watch(
   }
 );
 
-const { z, control } = useMagicKeys();
+const { z, r, control } = useMagicKeys();
 
-watch([z, control], ([z, ctrl]) => {
+watch([z, r, control], ([z, ctrl]) => {
   if (z && ctrl) {
     if (history.value.length > 1) {
       const prev = history.value[history.value.length - 2];
@@ -141,6 +141,8 @@ watch([z, control], ([z, ctrl]) => {
 
       items.value = prev;
     }
+  } else if (r && ctrl) {
+    reset();
   }
 });
 </script>
