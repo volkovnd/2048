@@ -132,7 +132,7 @@ watch(
 
 const { z, r, control } = useMagicKeys();
 
-watch([z, r, control], ([z, ctrl]) => {
+watch([z, r, control], ([z, r, ctrl]) => {
   if (z && ctrl) {
     if (history.value.length > 1) {
       const prev = history.value[history.value.length - 2];
