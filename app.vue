@@ -134,8 +134,6 @@ const { z, control } = useMagicKeys();
 watch([z, control], ([z, ctrl]) => {
   if (z && ctrl) {
     if (history.value.length > 1) {
-      console.log("undo");
-
       const prev = history.value[history.value.length - 2];
 
       history.value.splice(history.value.length - 1, 1);
