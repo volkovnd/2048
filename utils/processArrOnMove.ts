@@ -29,23 +29,5 @@ export const processArrOnMoveLeft = (items: Item[], cb?: (value: number) => void
 };
 
 export const processArrOnMoveRight = (items: Item[], cb?: (value: number) => void) => {
-  const row = clone(items);
-
-  moveEmptyItems(row, false);
-
-  for (let i = row.length - 1; i > 1; i--) {
-    const current = row[i].value;
-    const next = row[i - 1].value;
-
-    if (current !== null && current === next) {
-      row[i].value = current * 2;
-      row[i - 1].value = null;
-
-      if (cb) cb(current);
-    }
-  }
-
-  moveEmptyItems(row, false);
-
-  return row;
+  return processArrOnMoveLeft(clone(items).reverse(), cb).reverse();
 };
