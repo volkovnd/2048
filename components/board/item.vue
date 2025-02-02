@@ -1,6 +1,6 @@
 <template>
   <div
-    class="board-item row row-center shadow"
+    class="board-item"
     :class="{ 'board-item-disabled': disabled, 'empty': !value }"
     :style="{ color: textColor }"
   >
@@ -51,17 +51,31 @@ const textColor = computed(() => {
 });
 </script>
 
-<style scoped>
+<style>
 .board-item {
   position: absolute;
   z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: var(--board-item-size);
   height: var(--board-item-size);
   font-size: calc(var(--board-item-size) / 2);
   background-color: var(--secondary);
   border: 1px solid #0003;
   border-radius: 5%;
+  box-shadow:
+    0 1px 3px -1px #0003,
+    0 3px 5px #00000024,
+    0 1px 9px #0000001f;
   transition: all 0.2s ease-in-out;
+}
+
+.dark-mode .board-item {
+  box-shadow:
+    0 1px 3px -1px #fff3,
+    0 3px 5px #ffffff24,
+    0 1px 9px #ffffff1f;
 }
 
 .board-item.empty {

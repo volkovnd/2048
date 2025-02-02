@@ -4,8 +4,6 @@ export default defineNuxtConfig({
 
   telemetry: false,
 
-  css: ["normalize.css", "~/assets/global.css"],
-
   app: {
     head: {
       htmlAttrs: {

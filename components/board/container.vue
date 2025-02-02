@@ -1,5 +1,5 @@
 <template>
-  <div class="board mx-auto">
+  <div class="board">
     <slot />
   </div>
 </template>

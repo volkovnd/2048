@@ -1,40 +1,37 @@
 <template>
-  <header
-    id="header"
-    class="row row-gap px-gap py-gap mx-auto"
-  >
-    <slot name="status" />
+  <header id="header">
+    <div class="header-col">
+      <h3 class="score-title">Результат: {{ score }}</h3>
+    </div>
 
-    <UiButton
-      class="ml-auto px-gap"
-      @click="$emit('reset')"
-    >
-      Заново
-    </UiButton>
+    <div class="header-col">
+      <ClientOnly>
+        <h3
+          v-if="result"
+          class="result-title"
+        >
+          {{ result }}
+        </h3>
+      </ClientOnly>
+    </div>
 
-    <ColorScheme placeholder="theme">
-      <UiButton
-        v-if="$colorMode.value === 'dark'"
-        class="py-gap px-gap"
-        @click="$colorMode.preference = 'light'"
-      >
-        <UiIcon
-          :path="mdiWhiteBalanceSunny"
-          :size="20"
+    <div class="header-col">
+      <UiButton @click="$emit('reset')"> Заново </UiButton>
+
+      <ColorScheme placeholder="theme">
+        <UiButton
+          v-if="$colorMode.value === 'dark'"
+          :icon="mdiWhiteBalanceSunny"
+          @click="$colorMode.preference = 'light'"
         />
-      </UiButton>
 
-      <UiButton
-        v-else
-        class="py-gap px-gap"
-        @click="$colorMode.preference = 'dark'"
-      >
-        <UiIcon
-          :path="mdiMoonWaningCrescent"
-          :size="20"
+        <UiButton
+          v-else
+          :icon="mdiMoonWaningCrescent"
+          @click="$colorMode.preference = 'dark'"
         />
-      </UiButton>
-    </ColorScheme>
+      </ColorScheme>
+    </div>
   </header>
 </template>
 
@@ -44,12 +41,33 @@ import { mdiMoonWaningCrescent, mdiWhiteBalanceSunny } from "@mdi/js";
 defineEmits<{
   reset: [];
 }>();
+
+defineProps<{
+  score?: number;
+  result?: string;
+}>();
 </script>
 
 <style lang="css">
 #header {
-  width: var(--board-size);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
   height: var(--header-height);
-  padding: calc(var(--gap) / 2);
+
+  padding-top: var(--spacing);
+  padding-bottom: var(--spacing);
+}
+
+.header-col {
+  display: flex;
+  gap: var(--spacing);
+  align-items: center;
+}
+
+.score-title,
+.result-title {
+  font-size: 1.5rem;
 }
 </style>

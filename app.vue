@@ -1,41 +1,29 @@
 <template>
   <div>
     <NuxtLayout>
-      <AppHeader @reset="reset">
-        <template #status>
-          <ClientOnly>
-            <h3
-              style="font-size: max(3.5vmin, 1rem); text-align: center"
-              class="my-auto"
-            >
-              Результат: {{ result }}
-            </h3>
-            <h3
-              v-if="isFinished"
-              class="my-none mx-auto"
-              style="font-size: max(3.5vmin, 1rem); text-align: center"
-            >
-              Игра закончена!
-            </h3>
-          </ClientOnly>
-        </template>
-      </AppHeader>
+      <UiContainer>
+        <AppHeader
+          :score="result"
+          :result="isFinished ? 'Игра закончена!' : ''"
+          @reset="reset"
+        />
 
-      <BoardContainer>
-        <ClientOnly>
-          <BoardItem
-            v-for="item in computedItems"
-            :id="`item-${item.id}`"
-            :key="item.id"
-            :value="item.value"
-            :disabled="isFinished"
-            :style="{
-              left: `calc(${item.x} * (var(--board-item-size) + var(--gap)) + var(--gap))`,
-              top: `calc(${item.y} * (var(--board-item-size) + var(--gap)) + var(--gap))`
-            }"
-          />
-        </ClientOnly>
-      </BoardContainer>
+        <BoardContainer>
+          <ClientOnly>
+            <BoardItem
+              v-for="item in computedItems"
+              :id="`item-${item.id}`"
+              :key="item.id"
+              :value="item.value"
+              :disabled="isFinished"
+              :style="{
+                left: `calc(${item.x} * (var(--board-item-size) + var(--spacing)))`,
+                top: `calc(${item.y} * (var(--board-item-size) + var(--spacing)))`
+              }"
+            />
+          </ClientOnly>
+        </BoardContainer>
+      </UiContainer>
     </NuxtLayout>
   </div>
 </template>
@@ -128,3 +116,52 @@ const reset = () => {
   isFinished.value = false;
 };
 </script>
+
+<style lang="css">
+@import "normalize.css";
+
+:root {
+  --header-height: calc(4rem);
+
+  --spacing: max(2vmin, 1rem);
+
+  --board-size: calc(100vh - var(--header-height));
+  --board-item-size: calc((var(--board-size) - 3 * var(--spacing)) / 4);
+
+  --background-bg: #fff;
+  --text-color: #000;
+
+  --primary: #0097a7;
+  --secondary: #f0f0f0;
+  --disabled: #c8c8c8;
+}
+
+.dark-mode {
+  --primary: #090e0f;
+  --secondary: #b4b1b1;
+  --background-bg: #393939;
+  --disabled: #888686;
+  --text-color: #fff;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  font-family: Roboto, sans-serif;
+}
+
+body {
+  color: var(--text-color);
+  background-color: var(--background-bg);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+</style>
