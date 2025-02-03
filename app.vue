@@ -8,6 +8,7 @@
     />
     <div
       id="board"
+      ref="boardRef"
       class="container"
     >
       <ClientOnly>
@@ -95,6 +96,32 @@ onKeyStroke("ArrowLeft", createOnKeyHandler(onLeft));
 onKeyStroke("ArrowRight", createOnKeyHandler(onRight));
 onKeyStroke("ArrowUp", createOnKeyHandler(onUp));
 onKeyStroke("ArrowDown", createOnKeyHandler(onDown));
+
+const boardRef = templateRef<HTMLDivElement>("boardRef");
+
+const { isSwiping, direction } = useSwipe(boardRef);
+
+watch([isSwiping, direction], ([isSwiping, direction]) => {
+  const swipeHandler = (createResultFn: (cb?: (value: number) => void) => ItemDashboard) => {
+    const result = createResultFn(addToResult);
+
+    if (!isEqualBoard(result, items.value)) {
+      items.value = addRandomItem(result);
+    }
+  };
+
+  if (isSwiping) {
+    if (direction === "left") {
+      swipeHandler(onLeft);
+    } else if (direction === "right") {
+      swipeHandler(onRight);
+    } else if (direction === "up") {
+      swipeHandler(onUp);
+    } else if (direction === "down") {
+      swipeHandler(onDown);
+    }
+  }
+});
 
 const isWinned = computed(() => items.value.some((item) => item.value === 2048));
 const isLosed = ref(false);
