@@ -182,12 +182,10 @@ watch([z, r, control], ([z, r, ctrl]) => {
 @import "normalize.css";
 
 :root {
-  --header-height: calc(4rem);
-
+  --header-height: 4rem;
   --spacing: 1rem;
 
-  --board-size: min(calc(100vw), calc(100vh - var(--header-height)));
-
+  --board-size: calc(100vmin - var(--header-height));
   --board-item-size: calc((var(--board-size) - 5 * var(--spacing)) / 4);
 
   --background-bg: #fff;
@@ -229,7 +227,7 @@ body {
 
 .container {
   width: 100%;
-  max-width: calc(var(--board-size));
+  max-width: calc(var(--board-size) + 2 * var(--spacing));
 
   padding-right: var(--spacing);
   padding-left: var(--spacing);
