@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 100vw; height: 100vh">
+  <div>
     <AppHeader
       :score="result"
       :result="isWinned ? 'Вы победили!' : isLosed ? 'Игра закончена!' : ''"
@@ -227,7 +227,7 @@ body {
 
 .container {
   width: 100%;
-  max-width: calc(var(--board-size) + 2 * var(--spacing));
+  max-width: var(--board-size);
 
   padding-right: var(--spacing);
   padding-left: var(--spacing);
