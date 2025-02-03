@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ItemDashboard } from "@/types";
+import type { HistoryItem, Item, ItemDashboard } from "@/types";
 
 /** В каждом раунде появляется плитка номинала «2» (с вероятностью 90 %) или «4» (с вероятностью 10 %) */
 const addRandomItem = (items: ItemDashboard) => {
@@ -48,7 +48,7 @@ const generateInitialBoard = (): ItemDashboard =>
 
 const items = useSessionStorage<ItemDashboard>("2048-items", generateInitialBoard());
 
-const computedItems = computed<Item & { position: ItemPosition }>(() =>
+const computedItems = computed<Item[]>(() =>
   clone(items.value)
     .map((item, index) => ({
       ...item,
@@ -117,10 +117,7 @@ const reset = () => {
   isLosed.value = false;
 };
 
-const history = ref<{
-  items: ItemDashboard[];
-  score: number;
-}>([]);
+const history = ref<HistoryItem[]>([]);
 
 watch(
   items,

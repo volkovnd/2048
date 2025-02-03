@@ -20,11 +20,16 @@
 <script setup lang="ts">
 import type { ItemValue, ItemPosition } from "~/types";
 
-const props = defineProps<{
-  value: ItemValue;
-  position: ItemPosition;
-  disabled?: boolean;
-}>();
+const props = withDefaults(
+  defineProps<{
+    value: ItemValue;
+    position?: ItemPosition;
+    disabled?: boolean;
+  }>(),
+  {
+    position: () => ({ x: 0, y: 0 })
+  }
+);
 
 const textColor = computed(() => {
   switch (props.value) {
