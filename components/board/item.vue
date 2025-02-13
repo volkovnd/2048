@@ -2,11 +2,6 @@
   <div
     class="board-item"
     :class="{ 'board-item-disabled': disabled, 'empty': !value }"
-    :style="{
-      color: textColor,
-      left: `calc(${position.x} * (var(--board-item-size) + var(--spacing)) + var(--spacing))`,
-      top: `calc(${position.y} * (var(--board-item-size) + var(--spacing)) + var(--spacing))`
-    }"
   >
     <div
       v-if="value"
@@ -29,6 +24,13 @@ const props = withDefaults(
   {
     position: () => ({ x: 0, y: 0 })
   }
+);
+
+const translateX = computed(
+  () => `calc(${props.position.x} * (var(--board-item-size) + var(--spacing)))`
+);
+const translateY = computed(
+  () => `calc(${props.position.y} * (var(--board-item-size) + var(--spacing)))`
 );
 
 const textColor = computed(() => {
@@ -64,13 +66,20 @@ const textColor = computed(() => {
 <style>
 .board-item {
   position: absolute;
+  top: var(--spacing);
+  left: var(--spacing);
+
   z-index: 3;
   display: flex;
   align-items: center;
   justify-content: center;
   width: var(--board-item-size);
   height: var(--board-item-size);
+
   font-size: calc(var(--board-item-size) / 3);
+
+  color: v-bind(textColor);
+
   background-color: var(--secondary);
   border: 1px solid #0003;
   border-radius: 5%;
@@ -78,6 +87,8 @@ const textColor = computed(() => {
     0 1px 3px -1px #0003,
     0 3px 5px #00000024,
     0 1px 9px #0000001f;
+
+  transform: translateX(v-bind(translateX)) translateY(v-bind(translateY));
   transition: all 0.2s ease-in-out;
 }
 
