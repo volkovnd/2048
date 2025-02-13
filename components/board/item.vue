@@ -58,7 +58,7 @@ const textColor = computed(() => {
     case 2048:
       return "#088";
     default:
-      return undefined;
+      return "inherit";
   }
 });
 </script>
