@@ -9,6 +9,7 @@
   "type": "module",
   "scripts": {
     "build": "nuxt build",
+    "predev": "nuxt cleanup && nuxt prepare",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
