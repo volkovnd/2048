@@ -185,7 +185,7 @@ watch([z, r, control], ([z, r, ctrl]) => {
   --header-height: 4rem;
   --spacing: 1rem;
 
-  --board-size: calc(100vmin - var(--header-height));
+  --board-size: min(100vw, calc(100vh - var(--header-height)));
   --board-item-size: calc((var(--board-size) - 5 * var(--spacing)) / 4);
 
   --background-bg: #fff;
