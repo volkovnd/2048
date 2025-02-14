@@ -27,7 +27,7 @@
 </template>
 
 <script setup lang="ts">
-import type { HistoryItem, Item, ItemDashboard } from "@/types";
+import type { Item, ItemDashboard } from "@/types";
 
 /** В каждом раунде появляется плитка номинала «2» (с вероятностью 90 %) или «4» (с вероятностью 10 %) */
 const addRandomItem = (items: ItemDashboard) => {
@@ -150,34 +150,13 @@ const reset = () => {
   isLoosed.value = false;
 };
 
-const history = ref<HistoryItem[]>([]);
-
-watch(
-  items,
-  () => {
-    history.value.push({
-      items: clone(items.value),
-      score: result.value
-    });
-  },
-  {
-    immediate: true,
-    deep: true
-  }
-);
+const { history, prevStep } = useHistory(items, result);
 
 const { z, r, control } = useMagicKeys();
 
 watch([z, r, control], ([z, r, ctrl]) => {
   if (z && ctrl) {
-    if (history.value.length > 1) {
-      const prev = history.value[history.value.length - 2];
-
-      history.value.splice(history.value.length - 1, 1);
-
-      items.value = prev.items;
-      result.value = prev.score;
-    }
+    prevStep();
   } else if (r && ctrl) {
     reset();
   }
