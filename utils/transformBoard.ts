@@ -6,7 +6,7 @@ export const transformDashboardToColumns = (items: ItemDashboard) => {
   );
 };
 
-export const transformmDashboardToRows = (items: ItemDashboard) => {
+export const transformDashboardToRows = (items: ItemDashboard) => {
   return Array.from({ length: 4 }, (_v, y) =>
     Array.from({ length: 4 }, (_v, x) => items[getIndexFromXY(x, y)])
   );
@@ -21,7 +21,7 @@ export const transformRowsToDashboard = (rows: ItemRow[]) => {
 };
 
 export const mapRows = (items: ItemDashboard, fn: (item: ItemRow) => ItemRow) => {
-  return transformRowsToDashboard(transformmDashboardToRows(items).map((row) => fn(row)));
+  return transformRowsToDashboard(transformDashboardToRows(items).map((row) => fn(row)));
 };
 
 export const mapColumns = (items: ItemDashboard, fn: (item: ItemColumn) => ItemColumn) => {

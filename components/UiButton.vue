@@ -3,40 +3,41 @@
     class="ui-button"
     :type="type"
   >
-    <svg
+    <UiIcon
       v-if="icon"
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      :width="20"
-      :height="20"
-    >
-      <path
-        :d="icon"
-        fill="currentColor"
-      />
-    </svg>
+      class="ui-button-icon"
+      :icon="icon"
+    />
 
     <div
-      v-if="!!$slots.default || label"
-      class="label"
+      v-if="label"
+      class="ui-button-label"
     >
-      <slot>{{ label }}</slot>
+      {{ label }}
     </div>
   </button>
 </template>
 
 <script lang="ts" setup>
-defineProps<{
-  type?: "button";
-  icon?: string;
-  label?: string;
-}>();
+import type { ButtonHTMLAttributes } from "vue";
+
+withDefaults(
+  defineProps<{
+    type?: ButtonHTMLAttributes["type"];
+    icon?: string;
+    label?: string;
+  }>(),
+  {
+    type: "button",
+    icon: undefined,
+    label: undefined
+  }
+);
 </script>
 
-<style scoped>
+<style>
 .ui-button {
-  display: flex;
-  gap: calc(var(--spacing) / 2);
+  display: inline-flex;
   align-items: center;
   min-height: 32px;
   padding: calc(var(--spacing) / 4) calc(var(--spacing) * 3 / 4);
@@ -50,7 +51,12 @@ defineProps<{
   border-radius: 10%;
 }
 
-.ui-button svg {
+.ui-button-icon {
   display: block;
 }
+
+.ui-button-icon + .ui-button-label {
+  margin-left: calc(var(--spacing) / 2);
+}
 </style>
+q

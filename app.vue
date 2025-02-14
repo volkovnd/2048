@@ -2,7 +2,7 @@
   <div>
     <AppHeader
       :score="result"
-      :result="isWinned ? 'Вы победили!' : isLosed ? 'Игра закончена!' : ''"
+      :result="isLoosed ? 'Игра закончена!' : ''"
       class="container"
       @reset="reset"
     />
@@ -17,7 +17,7 @@
           :id="`item-${item.id}`"
           :key="item.id"
           :value="item.value"
-          :disabled="isLosed || isWinned"
+          :disabled="isLoosed"
           :position="item.position"
         />
       </ClientOnly>
@@ -62,12 +62,6 @@ const result = ref(0);
 
 const addToResult = (value: number) => {
   result.value += value;
-};
-
-const isAllowedAction = (action: () => ItemDashboard) => {
-  const result = action();
-
-  return !isEqualBoard(result, items.value);
 };
 
 const createOnKeyHandler = (createResultFn: (cb?: (value: number) => void) => ItemDashboard) => {
@@ -123,13 +117,25 @@ watch([isSwiping, direction], ([isSwiping, direction]) => {
   }
 });
 
-const isWinned = computed(() => items.value.some((item) => item.value === 2048));
-const isLosed = ref(false);
+const isLoosed = ref(false);
 
 watch(
   items,
-  () => {
-    isLosed.value = [onLeft, onRight, onUp, onDown].every((fn) => !isAllowedAction(fn));
+  (newItems) => {
+    isLoosed.value = ![
+      transformDashboardToRows(newItems),
+      transformDashboardToColumns(newItems)
+    ].some((arr) =>
+      arr.some((items) =>
+        items.some(
+          (item, index) =>
+            // Либо пустая плитка
+            item.value === null ||
+            // Либо имеется такой же сосед
+            (index < items.length - 1 && item.value === items[index + 1].value)
+        )
+      )
+    );
   },
   {
     immediate: true
@@ -141,7 +147,7 @@ const reset = () => {
 
   result.value = 0;
 
-  isLosed.value = false;
+  isLoosed.value = false;
 };
 
 const history = ref<HistoryItem[]>([]);

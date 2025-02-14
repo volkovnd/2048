@@ -66,17 +66,20 @@ const textColor = computed(() => {
 <style>
 .board-item {
   position: absolute;
+
   top: var(--spacing);
   left: var(--spacing);
 
   z-index: 3;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   width: var(--board-item-size);
   height: var(--board-item-size);
 
-  font-size: calc(var(--board-item-size) / 3);
+  font-size: min(2.5rem, 5vmin);
 
   color: v-bind(textColor);
 
