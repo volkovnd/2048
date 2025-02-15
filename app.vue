@@ -1,7 +1,7 @@
 <template>
   <div>
     <AppHeader
-      :score="result"
+      :score="score"
       :result="isLoosed ? 'Игра закончена!' : ''"
       class="container"
       @reset="reset"
@@ -58,15 +58,15 @@ const computedItems = computed<Item[]>(() =>
     .sort((a, b) => a.id - b.id)
 );
 
-const result = ref(0);
+const score = ref(0);
 
-const addToResult = (value: number) => {
-  result.value += value;
+const addToScore = (value: number) => {
+  score.value += value;
 };
 
 const createOnKeyHandler = (createResultFn: (cb?: (value: number) => void) => ItemDashboard) => {
   return () => {
-    const result = createResultFn(addToResult);
+    const result = createResultFn(addToScore);
 
     if (!isEqualBoard(result, items.value)) {
       items.value = addRandomItem(result);
@@ -97,7 +97,7 @@ const { isSwiping, direction } = useSwipe(boardRef);
 
 watch([isSwiping, direction], ([isSwiping, direction]) => {
   const swipeHandler = (createResultFn: (cb?: (value: number) => void) => ItemDashboard) => {
-    const result = createResultFn(addToResult);
+    const result = createResultFn(addToScore);
 
     if (!isEqualBoard(result, items.value)) {
       items.value = addRandomItem(result);
@@ -143,14 +143,16 @@ watch(
 );
 
 const reset = () => {
-  items.value = generateInitialBoard();
+  history.value = [];
 
-  result.value = 0;
+  score.value = 0;
 
   isLoosed.value = false;
+
+  items.value = generateInitialBoard();
 };
 
-const { history, prevStep } = useHistory(items, result);
+const { prevStep, history } = useHistory(items, score);
 
 const { z, r, control } = useMagicKeys();
 
