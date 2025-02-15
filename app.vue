@@ -1,15 +1,13 @@
 <template>
-  <div>
+  <div id="wrapper">
     <AppHeader
       :score="score"
       :has-possible-steps="hasPossibleSteps"
-      class="container"
       @reset="reset"
     />
     <div
       id="board"
       ref="boardRef"
-      class="container"
     >
       <ClientOnly>
         <BoardItem
@@ -17,7 +15,7 @@
           :id="`item-${item.id}`"
           :key="item.id"
           :value="item.value"
-          :disabled="!hasPossibleSteps"
+          :has-possible-steps="hasPossibleSteps"
           :position="item.position"
         />
       </ClientOnly>
@@ -29,8 +27,12 @@
 <script setup lang="ts">
 import type { Item, ItemDashboard } from "@/types";
 
-/** В каждом раунде появляется плитка номинала «2» (с вероятностью 90 %) или «4» (с вероятностью 10 %) */
+// Доска и ее элименты
+const boardRef = templateRef<HTMLDivElement>("boardRef");
+
 const addRandomItem = (items: ItemDashboard) => {
+  /** В каждом раунде появляется плитка номинала «2» (с вероятностью 90 %) или «4» (с вероятностью 10 %) */
+
   const result = clone(items);
 
   const emptyItems = result.filter((item) => item.value === null);
@@ -58,11 +60,39 @@ const computedItems = computed<Item[]>(() =>
     .sort((a, b) => a.id - b.id)
 );
 
+// Очки
+
 const score = ref(0);
 
 const addToScore = (value: number) => {
   score.value += value;
 };
+
+// Обработка передвижений и кнопок клавиатуры / свайпов
+
+// Наличие возможных ходов
+const hasPossibleSteps = computed(() => {
+  // Пока имеется хотя бы одна пустая ячейка, то игра продолжается
+  if (items.value.some((item) => item.value === null)) {
+    return true;
+  }
+
+  // Проверка, что в ряду нет двух одинаковых элементов
+  for (let i = 0; i < 4; i++) {
+    for (let j = 0; j < 3; j++) {
+      if (
+        // Если текущее значение равно следующему по горизонтали, то игра продолжается
+        items.value[i * 4 + j].value === items.value[i * 4 + (j + 1)].value ||
+        // Если текущее значение равно следующему по вертикали, то игра продолжается
+        items.value[j * 4 + i].value === items.value[(j + 1) * 4 + i].value
+      ) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+});
 
 const moveHandler = (createResultFn: (cb?: (value: number) => void) => ItemDashboard) => {
   const result = createResultFn(addToScore);
@@ -89,46 +119,32 @@ onKeyStroke("ArrowRight", () => moveHandler(onRight));
 onKeyStroke("ArrowUp", () => moveHandler(onUp));
 onKeyStroke("ArrowDown", () => moveHandler(onDown));
 
-const boardRef = templateRef<HTMLDivElement>("boardRef");
-
 const { isSwiping, direction } = useSwipe(boardRef);
 
 watch([isSwiping, direction], ([isSwiping, direction]) => {
   if (isSwiping) {
-    if (direction === "left") {
-      moveHandler(onLeft);
-    } else if (direction === "right") {
-      moveHandler(onRight);
-    } else if (direction === "up") {
-      moveHandler(onUp);
-    } else if (direction === "down") {
-      moveHandler(onDown);
+    switch (direction) {
+      case "left":
+        moveHandler(onLeft);
+
+        break;
+      case "right":
+        moveHandler(onRight);
+
+        break;
+      case "up":
+        moveHandler(onUp);
+
+        break;
+      case "down":
+        moveHandler(onDown);
+
+        break;
     }
   }
 });
 
-const hasPossibleSteps = computed(() => {
-  // Пока имеется хотя бы одна пустая ячейка, то игра продолжается
-  if (items.value.some((item) => item.value === null)) {
-    return true;
-  }
-
-  // Проверка, что в ряду нет двух одинаковых элементов
-  for (let i = 0; i < 4; i++) {
-    for (let j = 0; j < 3; j++) {
-      if (
-        // Если текущее значение равно следующему по горизонтали, то игра продолжается
-        items.value[i * 4 + j].value === items.value[i * 4 + (j + 1)].value ||
-        // Если текущее значение равно следующему по вертикали, то игра продолжается
-        items.value[j * 4 + i].value === items.value[(j + 1) * 4 + i].value
-      ) {
-        return true;
-      }
-    }
-  }
-
-  return false;
-});
+const { prevStep, history } = useHistory(items, score);
 
 const reset = () => {
   history.value = [];
@@ -137,8 +153,6 @@ const reset = () => {
 
   items.value = generateInitialBoard();
 };
-
-const { prevStep, history } = useHistory(items, score);
 
 const { z, r, control } = useMagicKeys();
 
@@ -161,8 +175,12 @@ watch([z, r, control], ([z, r, ctrl]) => {
 
   --spacing: 1rem;
 
-  --board-size: min(100vw, calc(100vh - var(--header-height)));
-  --board-item-size: calc((var(--board-size) - 5 * var(--spacing)) / 4);
+  --board-size: min(
+    calc(100vw - var(--spacing) * 2),
+    calc(100vh - var(--header-height) - var(--spacing) * 2)
+  );
+
+  --board-item-size: calc((var(--board-size) - 3 * var(--spacing)) / 4);
 
   --background-bg: #fff;
   --text-color: #000;
@@ -201,9 +219,8 @@ body {
   box-sizing: border-box;
 }
 
-.container {
-  width: 100%;
-  max-width: var(--board-size);
+#wrapper {
+  width: calc(var(--board-size) + var(--spacing) * 2);
 
   padding-right: var(--spacing);
   padding-left: var(--spacing);
@@ -218,6 +235,7 @@ body {
   width: var(--board-size);
   height: var(--board-size);
 
-  padding: var(--spacing);
+  margin-top: var(--spacing);
+  margin-bottom: var(--spacing);
 }
 </style>

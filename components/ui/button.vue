@@ -49,6 +49,11 @@ withDefaults(
   background-color: var(--primary);
   border: none;
   border-radius: var(--base-border-radius);
+
+  box-shadow:
+    0 1px 3px -1px #0003,
+    0 3px 5px #00000024,
+    0 1px 9px #0000001f;
 }
 
 .ui-button-icon {

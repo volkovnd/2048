@@ -1,7 +1,10 @@
 <template>
   <div
     class="board-item"
-    :class="{ 'board-item-disabled': disabled, 'empty': !value }"
+    :class="{ 'board-item-disabled': !hasPossibleSteps, 'empty': !value }"
+    :style="{
+      transform: `translateX(${translateX}) translateY(${translateY})`
+    }"
   >
     <div
       v-if="value"
@@ -19,7 +22,7 @@ const props = withDefaults(
   defineProps<{
     value: ItemValue;
     position?: ItemPosition;
-    disabled?: boolean;
+    hasPossibleSteps?: boolean;
   }>(),
   {
     position: () => ({ x: 0, y: 0 })
@@ -67,8 +70,8 @@ const textColor = computed(() => {
 .board-item {
   position: absolute;
 
-  top: var(--spacing);
-  left: var(--spacing);
+  top: 0;
+  left: 0;
 
   z-index: 3;
 
@@ -85,13 +88,12 @@ const textColor = computed(() => {
 
   background-color: var(--secondary);
   border: 1px solid #0003;
-  border-radius: 5%;
+  border-radius: var(--base-border-radius);
   box-shadow:
     0 1px 3px -1px #0003,
     0 3px 5px #00000024,
     0 1px 9px #0000001f;
 
-  transform: translateX(v-bind(translateX)) translateY(v-bind(translateY));
   transition: all 0.2s ease-in-out;
 }
 
