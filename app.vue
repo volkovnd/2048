@@ -2,7 +2,7 @@
   <div>
     <AppHeader
       :score="score"
-      :result="isLoosed ? 'Игра закончена!' : ''"
+      :result="!hasPossibleSteps ? 'Игра закончена!' : ''"
       class="container"
       @reset="reset"
     />
@@ -17,7 +17,7 @@
           :id="`item-${item.id}`"
           :key="item.id"
           :value="item.value"
-          :disabled="isLoosed"
+          :disabled="!hasPossibleSteps"
           :position="item.position"
         />
       </ClientOnly>
@@ -117,20 +117,28 @@ watch([isSwiping, direction], ([isSwiping, direction]) => {
   }
 });
 
-const isLoosed = computed(
-  () =>
-    ![transformDashboardToRows(items.value), transformDashboardToColumns(items.value)].some((arr) =>
-      arr.some((items) =>
-        items.some(
-          (item, index) =>
-            // Либо пустая плитка
-            item.value === null ||
-            // Либо имеется такой же сосед
-            (index < items.length - 1 && item.value === items[index + 1].value)
-        )
-      )
-    )
-);
+const hasPossibleSteps = computed(() => {
+  // Пока имеется хотя бы одна пустая ячейка, то игра продолжается
+  if (items.value.some((item) => item.value === null)) {
+    return true;
+  }
+
+  // Проверка, что в ряду нет двух одинаковых элементов
+  for (let i = 0; i < 4; i++) {
+    for (let j = 0; j < 3; j++) {
+      if (
+        // Если текущее значение равно следующему по горизонтали, то игра продолжается
+        items.value[i * 4 + j].value === items.value[i * 4 + (j + 1)].value ||
+        // Если текущее значение равно следующему по вертикали, то игра продолжается
+        items.value[j * 4 + i].value === items.value[(j + 1) * 4 + i].value
+      ) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+});
 
 const reset = () => {
   history.value = [];
