@@ -156,6 +156,9 @@ watch([z, r, control], ([z, r, ctrl]) => {
 
 :root {
   --header-height: 4rem;
+
+  --base-border-radius: 0.5rem;
+
   --spacing: 1rem;
 
   --board-size: min(100vw, calc(100vh - var(--header-height)));

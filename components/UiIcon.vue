@@ -16,8 +16,8 @@
 withDefaults(
   defineProps<{ icon: string; width?: number; height?: number; viewBox?: string; fill?: string }>(),
   {
-    width: 20,
-    height: 20,
+    width: 24,
+    height: 24,
 
     fill: "currentColor",
 

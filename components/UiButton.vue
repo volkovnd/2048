@@ -39,8 +39,8 @@ withDefaults(
 .ui-button {
   display: inline-flex;
   align-items: center;
-  min-height: 32px;
-  padding: calc(var(--spacing) / 4) calc(var(--spacing) * 3 / 4);
+  min-height: 40px;
+  padding: calc(var(--spacing) / 2) var(--spacing);
   font-size: 16px;
   font-weight: 400;
   line-height: 1.5;
@@ -48,7 +48,7 @@ withDefaults(
   cursor: pointer;
   background-color: var(--primary);
   border: none;
-  border-radius: 10%;
+  border-radius: var(--base-border-radius);
 }
 
 .ui-button-icon {
