@@ -6,16 +6,14 @@
       </ClientOnly>
     </div>
 
-    <div class="header-col">
-      <ClientOnly>
-        <h3
-          v-if="result"
-          class="header-title"
-        >
-          {{ result }}
-        </h3>
-      </ClientOnly>
-    </div>
+    <ClientOnly>
+      <div
+        v-if="!hasPossibleSteps"
+        class="header-col"
+      >
+        <h3 class="header-title">Игра закончена</h3>
+      </div>
+    </ClientOnly>
 
     <div class="header-col">
       <UiButton
@@ -50,7 +48,7 @@ defineEmits<{
 
 defineProps<{
   score?: number;
-  result?: string;
+  hasPossibleSteps?: boolean;
 }>();
 </script>
 

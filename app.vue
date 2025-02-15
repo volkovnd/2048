@@ -2,7 +2,7 @@
   <div>
     <AppHeader
       :score="score"
-      :result="!hasPossibleSteps ? 'Игра закончена!' : ''"
+      :has-possible-steps="hasPossibleSteps"
       class="container"
       @reset="reset"
     />
@@ -64,14 +64,12 @@ const addToScore = (value: number) => {
   score.value += value;
 };
 
-const createOnKeyHandler = (createResultFn: (cb?: (value: number) => void) => ItemDashboard) => {
-  return () => {
-    const result = createResultFn(addToScore);
+const moveHandler = (createResultFn: (cb?: (value: number) => void) => ItemDashboard) => {
+  const result = createResultFn(addToScore);
 
-    if (!isEqualBoard(result, items.value)) {
-      items.value = addRandomItem(result);
-    }
-  };
+  if (!isEqualBoard(result, items.value)) {
+    items.value = addRandomItem(result);
+  }
 };
 
 const onLeft = (cb?: (value: number) => void) =>
@@ -86,33 +84,25 @@ const onUp = (cb?: (value: number) => void) =>
 const onDown = (cb?: (value: number) => void) =>
   mapColumns(items.value, (column) => processArrOnMoveRight(column, cb));
 
-onKeyStroke("ArrowLeft", createOnKeyHandler(onLeft));
-onKeyStroke("ArrowRight", createOnKeyHandler(onRight));
-onKeyStroke("ArrowUp", createOnKeyHandler(onUp));
-onKeyStroke("ArrowDown", createOnKeyHandler(onDown));
+onKeyStroke("ArrowLeft", () => moveHandler(onLeft));
+onKeyStroke("ArrowRight", () => moveHandler(onRight));
+onKeyStroke("ArrowUp", () => moveHandler(onUp));
+onKeyStroke("ArrowDown", () => moveHandler(onDown));
 
 const boardRef = templateRef<HTMLDivElement>("boardRef");
 
 const { isSwiping, direction } = useSwipe(boardRef);
 
 watch([isSwiping, direction], ([isSwiping, direction]) => {
-  const swipeHandler = (createResultFn: (cb?: (value: number) => void) => ItemDashboard) => {
-    const result = createResultFn(addToScore);
-
-    if (!isEqualBoard(result, items.value)) {
-      items.value = addRandomItem(result);
-    }
-  };
-
   if (isSwiping) {
     if (direction === "left") {
-      swipeHandler(onLeft);
+      moveHandler(onLeft);
     } else if (direction === "right") {
-      swipeHandler(onRight);
+      moveHandler(onRight);
     } else if (direction === "up") {
-      swipeHandler(onUp);
+      moveHandler(onUp);
     } else if (direction === "down") {
-      swipeHandler(onDown);
+      moveHandler(onDown);
     }
   }
 });
