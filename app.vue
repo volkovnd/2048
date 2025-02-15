@@ -117,15 +117,9 @@ watch([isSwiping, direction], ([isSwiping, direction]) => {
   }
 });
 
-const isLoosed = ref(false);
-
-watch(
-  items,
-  (newItems) => {
-    isLoosed.value = ![
-      transformDashboardToRows(newItems),
-      transformDashboardToColumns(newItems)
-    ].some((arr) =>
+const isLoosed = computed(
+  () =>
+    ![transformDashboardToRows(items.value), transformDashboardToColumns(items.value)].some((arr) =>
       arr.some((items) =>
         items.some(
           (item, index) =>
@@ -135,19 +129,13 @@ watch(
             (index < items.length - 1 && item.value === items[index + 1].value)
         )
       )
-    );
-  },
-  {
-    immediate: true
-  }
+    )
 );
 
 const reset = () => {
   history.value = [];
 
   score.value = 0;
-
-  isLoosed.value = false;
 
   items.value = generateInitialBoard();
 };
