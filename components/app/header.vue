@@ -1,22 +1,26 @@
 <template>
   <header id="header">
     <div class="header-col">
-      <h3 class="score-title">Результат: {{ score }}</h3>
-    </div>
-
-    <div class="header-col">
       <ClientOnly>
-        <h3
-          v-if="result"
-          class="result-title"
-        >
-          {{ result }}
-        </h3>
+        <h3 class="header-title">Результат: {{ score }}</h3>
       </ClientOnly>
     </div>
 
+    <ClientOnly>
+      <div
+        v-if="!hasPossibleSteps"
+        class="header-col"
+      >
+        <h3 class="header-title">Игра закончена</h3>
+      </div>
+    </ClientOnly>
+
     <div class="header-col">
-      <UiButton @click="$emit('reset')"> Заново </UiButton>
+      <UiButton
+        label="Заново"
+        :icon="mdiRepeat"
+        @click="$emit('reset')"
+      />
 
       <ColorScheme placeholder="theme">
         <UiButton
@@ -36,7 +40,7 @@
 </template>
 
 <script lang="ts" setup>
-import { mdiMoonWaningCrescent, mdiWhiteBalanceSunny } from "@mdi/js";
+import { mdiMoonWaningCrescent, mdiWhiteBalanceSunny, mdiRepeat } from "@mdi/js";
 
 defineEmits<{
   reset: [];
@@ -44,7 +48,7 @@ defineEmits<{
 
 defineProps<{
   score?: number;
-  result?: string;
+  hasPossibleSteps?: boolean;
 }>();
 </script>
 
@@ -55,9 +59,6 @@ defineProps<{
   justify-content: space-between;
 
   height: var(--header-height);
-
-  padding-top: var(--spacing);
-  padding-bottom: var(--spacing);
 }
 
 .header-col {
@@ -66,8 +67,8 @@ defineProps<{
   align-items: center;
 }
 
-.score-title,
-.result-title {
+.header-title {
   font-size: 1.5rem;
+  font-weight: 400;
 }
 </style>

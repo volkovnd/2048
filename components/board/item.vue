@@ -1,11 +1,9 @@
 <template>
   <div
     class="board-item"
-    :class="{ 'board-item-disabled': disabled, 'empty': !value }"
+    :class="{ 'board-item-disabled': !hasPossibleSteps, 'empty': !value }"
     :style="{
-      color: textColor,
-      left: `calc(${position.x} * (var(--board-item-size) + var(--spacing)) + var(--spacing))`,
-      top: `calc(${position.y} * (var(--board-item-size) + var(--spacing)) + var(--spacing))`
+      transform: `translateX(${translateX}) translateY(${translateY})`
     }"
   >
     <div
@@ -24,11 +22,18 @@ const props = withDefaults(
   defineProps<{
     value: ItemValue;
     position?: ItemPosition;
-    disabled?: boolean;
+    hasPossibleSteps?: boolean;
   }>(),
   {
     position: () => ({ x: 0, y: 0 })
   }
+);
+
+const translateX = computed(
+  () => `calc(${props.position.x} * (var(--board-item-size) + var(--spacing)))`
+);
+const translateY = computed(
+  () => `calc(${props.position.y} * (var(--board-item-size) + var(--spacing)))`
 );
 
 const textColor = computed(() => {
@@ -56,7 +61,7 @@ const textColor = computed(() => {
     case 2048:
       return "#088";
     default:
-      return undefined;
+      return "inherit";
   }
 });
 </script>
@@ -64,20 +69,31 @@ const textColor = computed(() => {
 <style>
 .board-item {
   position: absolute;
+
+  top: 0;
+  left: 0;
+
   z-index: 3;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   width: var(--board-item-size);
   height: var(--board-item-size);
-  font-size: calc(var(--board-item-size) / 3);
+
+  font-size: min(2.5rem, 5vmin);
+
+  color: v-bind(textColor);
+
   background-color: var(--secondary);
   border: 1px solid #0003;
-  border-radius: 5%;
+  border-radius: var(--base-border-radius);
   box-shadow:
     0 1px 3px -1px #0003,
     0 3px 5px #00000024,
     0 1px 9px #0000001f;
+
   transition: all 0.2s ease-in-out;
 }
 

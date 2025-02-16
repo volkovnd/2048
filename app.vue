@@ -1,15 +1,13 @@
 <template>
-  <div>
+  <div id="wrapper">
     <AppHeader
-      :score="result"
-      :result="isWinned ? 'Вы победили!' : isLosed ? 'Игра закончена!' : ''"
-      class="container"
+      :score="score"
+      :has-possible-steps="hasPossibleSteps"
       @reset="reset"
     />
     <div
       id="board"
       ref="boardRef"
-      class="container"
     >
       <ClientOnly>
         <BoardItem
@@ -17,7 +15,7 @@
           :id="`item-${item.id}`"
           :key="item.id"
           :value="item.value"
-          :disabled="isLosed || isWinned"
+          :has-possible-steps="hasPossibleSteps"
           :position="item.position"
         />
       </ClientOnly>
@@ -27,10 +25,14 @@
 </template>
 
 <script setup lang="ts">
-import type { HistoryItem, Item, ItemDashboard } from "@/types";
+import type { Item, ItemDashboard } from "@/types";
 
-/** В каждом раунде появляется плитка номинала «2» (с вероятностью 90 %) или «4» (с вероятностью 10 %) */
+// Доска и ее элименты
+const boardRef = templateRef<HTMLDivElement>("boardRef");
+
 const addRandomItem = (items: ItemDashboard) => {
+  /** В каждом раунде появляется плитка номинала «2» (с вероятностью 90 %) или «4» (с вероятностью 10 %) */
+
   const result = clone(items);
 
   const emptyItems = result.filter((item) => item.value === null);
@@ -58,26 +60,46 @@ const computedItems = computed<Item[]>(() =>
     .sort((a, b) => a.id - b.id)
 );
 
-const result = ref(0);
+// Очки
 
-const addToResult = (value: number) => {
-  result.value += value;
+const score = ref(0);
+
+const addToScore = (value: number) => {
+  score.value += value;
 };
 
-const isAllowedAction = (action: () => ItemDashboard) => {
-  const result = action();
+// Обработка передвижений и кнопок клавиатуры / свайпов
 
-  return !isEqualBoard(result, items.value);
-};
+// Наличие возможных ходов
+const hasPossibleSteps = computed(() => {
+  // Пока имеется хотя бы одна пустая ячейка, то игра продолжается
+  if (items.value.some((item) => item.value === null)) {
+    return true;
+  }
 
-const createOnKeyHandler = (createResultFn: (cb?: (value: number) => void) => ItemDashboard) => {
-  return () => {
-    const result = createResultFn(addToResult);
-
-    if (!isEqualBoard(result, items.value)) {
-      items.value = addRandomItem(result);
+  // Проверка, что в ряду нет двух одинаковых элементов
+  for (let i = 0; i < 4; i++) {
+    for (let j = 0; j < 3; j++) {
+      if (
+        // Если текущее значение равно следующему по горизонтали, то игра продолжается
+        items.value[i * 4 + j].value === items.value[i * 4 + (j + 1)].value ||
+        // Если текущее значение равно следующему по вертикали, то игра продолжается
+        items.value[j * 4 + i].value === items.value[(j + 1) * 4 + i].value
+      ) {
+        return true;
+      }
     }
-  };
+  }
+
+  return false;
+});
+
+const moveHandler = (createResultFn: (cb?: (value: number) => void) => ItemDashboard) => {
+  const result = createResultFn(addToScore);
+
+  if (!isEqualBoard(result, items.value)) {
+    items.value = addRandomItem(result);
+  }
 };
 
 const onLeft = (cb?: (value: number) => void) =>
@@ -92,86 +114,51 @@ const onUp = (cb?: (value: number) => void) =>
 const onDown = (cb?: (value: number) => void) =>
   mapColumns(items.value, (column) => processArrOnMoveRight(column, cb));
 
-onKeyStroke("ArrowLeft", createOnKeyHandler(onLeft));
-onKeyStroke("ArrowRight", createOnKeyHandler(onRight));
-onKeyStroke("ArrowUp", createOnKeyHandler(onUp));
-onKeyStroke("ArrowDown", createOnKeyHandler(onDown));
-
-const boardRef = templateRef<HTMLDivElement>("boardRef");
+onKeyStroke("ArrowLeft", () => moveHandler(onLeft));
+onKeyStroke("ArrowRight", () => moveHandler(onRight));
+onKeyStroke("ArrowUp", () => moveHandler(onUp));
+onKeyStroke("ArrowDown", () => moveHandler(onDown));
 
 const { isSwiping, direction } = useSwipe(boardRef);
 
 watch([isSwiping, direction], ([isSwiping, direction]) => {
-  const swipeHandler = (createResultFn: (cb?: (value: number) => void) => ItemDashboard) => {
-    const result = createResultFn(addToResult);
-
-    if (!isEqualBoard(result, items.value)) {
-      items.value = addRandomItem(result);
-    }
-  };
-
   if (isSwiping) {
-    if (direction === "left") {
-      swipeHandler(onLeft);
-    } else if (direction === "right") {
-      swipeHandler(onRight);
-    } else if (direction === "up") {
-      swipeHandler(onUp);
-    } else if (direction === "down") {
-      swipeHandler(onDown);
+    switch (direction) {
+      case "left":
+        moveHandler(onLeft);
+
+        break;
+      case "right":
+        moveHandler(onRight);
+
+        break;
+      case "up":
+        moveHandler(onUp);
+
+        break;
+      case "down":
+        moveHandler(onDown);
+
+        break;
     }
   }
 });
 
-const isWinned = computed(() => items.value.some((item) => item.value === 2048));
-const isLosed = ref(false);
-
-watch(
-  items,
-  () => {
-    isLosed.value = [onLeft, onRight, onUp, onDown].every((fn) => !isAllowedAction(fn));
-  },
-  {
-    immediate: true
-  }
-);
+const { prevStep, history } = useHistory(items, score);
 
 const reset = () => {
+  history.value = [];
+
+  score.value = 0;
+
   items.value = generateInitialBoard();
-
-  result.value = 0;
-
-  isLosed.value = false;
 };
-
-const history = ref<HistoryItem[]>([]);
-
-watch(
-  items,
-  () => {
-    history.value.push({
-      items: clone(items.value),
-      score: result.value
-    });
-  },
-  {
-    immediate: true,
-    deep: true
-  }
-);
 
 const { z, r, control } = useMagicKeys();
 
 watch([z, r, control], ([z, r, ctrl]) => {
   if (z && ctrl) {
-    if (history.value.length > 1) {
-      const prev = history.value[history.value.length - 2];
-
-      history.value.splice(history.value.length - 1, 1);
-
-      items.value = prev.items;
-      result.value = prev.score;
-    }
+    prevStep();
   } else if (r && ctrl) {
     reset();
   }
@@ -183,10 +170,17 @@ watch([z, r, control], ([z, r, ctrl]) => {
 
 :root {
   --header-height: 4rem;
+
+  --base-border-radius: 0.5rem;
+
   --spacing: 1rem;
 
-  --board-size: calc(100vmin - var(--header-height));
-  --board-item-size: calc((var(--board-size) - 5 * var(--spacing)) / 4);
+  --board-size: min(
+    calc(100vw - var(--spacing) * 2),
+    calc(100vh - var(--header-height) - var(--spacing) * 2)
+  );
+
+  --board-item-size: calc((var(--board-size) - 3 * var(--spacing)) / 4);
 
   --background-bg: #fff;
   --text-color: #000;
@@ -225,9 +219,8 @@ body {
   box-sizing: border-box;
 }
 
-.container {
-  width: 100%;
-  max-width: var(--board-size);
+#wrapper {
+  width: calc(var(--board-size) + var(--spacing) * 2);
 
   padding-right: var(--spacing);
   padding-left: var(--spacing);
@@ -242,6 +235,7 @@ body {
   width: var(--board-size);
   height: var(--board-size);
 
-  padding: var(--spacing);
+  margin-top: var(--spacing);
+  margin-bottom: var(--spacing);
 }
 </style>

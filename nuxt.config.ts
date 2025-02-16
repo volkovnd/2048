@@ -41,11 +41,7 @@ export default defineNuxtConfig({
     display: "swap"
   },
 
-  features: {
-    inlineStyles: false
-  },
-
-  compatibilityDate: "2024-04-03",
+  compatibilityDate: "2025-02-14",
 
   eslint: {
     checker: true
