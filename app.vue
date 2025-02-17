@@ -209,6 +209,8 @@ html {
 }
 
 body {
+  overflow: hidden;
+
   color: var(--text-color);
   background-color: var(--background-bg);
 }
