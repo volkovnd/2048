@@ -1,17 +1,15 @@
 import type { Item } from "@/types";
 
 const moveEmptyItems = (items: Item[], left = true) => {
-  const notEmpty = items.filter((item) => item.value !== null);
-
-  const emptyItems = Array.from({ length: 4 - notEmpty.length }, () => createItem());
-
-  return ([] as Item[]).concat(left ? [] : emptyItems, notEmpty, left ? emptyItems : []);
+  return items.sort(
+    (a, b) => (a.value === null ? (left ? 1 : -1) : 0) - (b.value === null ? (left ? 1 : -1) : 0)
+  );
 };
 
 export const processArrOnMoveLeft = (items: Item[], cb?: (value: number) => void) => {
-  let row = clone(items);
+  const row = clone(items);
 
-  row = moveEmptyItems(row);
+  moveEmptyItems(row);
 
   for (let i = 0; i < row.length - 1; i++) {
     const current = row[i].value;
@@ -25,7 +23,7 @@ export const processArrOnMoveLeft = (items: Item[], cb?: (value: number) => void
     }
   }
 
-  row = moveEmptyItems(row);
+  moveEmptyItems(row);
 
   return row;
 };
