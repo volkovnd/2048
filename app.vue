@@ -61,12 +61,7 @@ const computedItems = computed<Item[]>(() =>
 );
 
 // Очки
-
-const score = ref(0);
-
-const addToScore = (value: number) => {
-  score.value += value;
-};
+const { addToScore, score } = useScore();
 
 // Обработка передвижений и кнопок клавиатуры / свайпов
 
@@ -103,16 +98,16 @@ const moveHandler = (createResultFn: (cb?: (value: number) => void) => ItemDashb
 };
 
 const onLeft = (cb?: (value: number) => void) =>
-  mapRows(items.value, (row) => processArrOnMoveLeft(row, cb));
+  mapRows(items.value, (row) => moveItemsLeft(row, cb));
 
 const onRight = (cb?: (value: number) => void) =>
-  mapRows(items.value, (row) => processArrOnMoveRight(row, cb));
+  mapRows(items.value, (row) => moveItemsRight(row, cb));
 
 const onUp = (cb?: (value: number) => void) =>
-  mapColumns(items.value, (column) => processArrOnMoveLeft(column, cb));
+  mapColumns(items.value, (column) => moveItemsLeft(column, cb));
 
 const onDown = (cb?: (value: number) => void) =>
-  mapColumns(items.value, (column) => processArrOnMoveRight(column, cb));
+  mapColumns(items.value, (column) => moveItemsRight(column, cb));
 
 onKeyStroke("ArrowLeft", () => moveHandler(onLeft));
 onKeyStroke("ArrowRight", () => moveHandler(onRight));
