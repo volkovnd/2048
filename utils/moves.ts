@@ -8,7 +8,7 @@ export const moveItemsLeft = (items: Item[], cb?: (value: number) => void) => {
   const row = clone(items);
 
   moveEmptyItems(row);
-  ``;
+
   for (let i = 0; i < row.length - 1; i++) {
     const current = row[i].value;
     const next = row[i + 1].value;
