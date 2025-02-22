@@ -28,7 +28,7 @@
 import type { Item, ItemDashboard } from "@/types";
 
 // Доска и ее элименты
-const boardRef = templateRef<HTMLDivElement>("boardRef");
+const boardRef = useTemplateRef("boardRef");
 
 const addRandomItem = (items: ItemDashboard) => {
   /** В каждом раунде появляется плитка номинала «2» (с вероятностью 90 %) или «4» (с вероятностью 10 %) */
