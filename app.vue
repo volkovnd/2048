@@ -109,15 +109,29 @@ const onUp = (cb?: (value: number) => void) =>
 const onDown = (cb?: (value: number) => void) =>
   mapColumns(items.value, (column) => moveItemsRight(column, cb));
 
-onKeyStroke("ArrowLeft", () => moveHandler(onLeft));
-onKeyStroke("ArrowRight", () => moveHandler(onRight));
-onKeyStroke("ArrowUp", () => moveHandler(onUp));
-onKeyStroke("ArrowDown", () => moveHandler(onDown));
+onKeyStroke(["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"], (e) => {
+  switch (e.key) {
+    case "ArrowLeft":
+      moveHandler(onLeft);
 
-const { isSwiping, direction } = useSwipe(boardRef);
+      break;
+    case "ArrowRight":
+      moveHandler(onRight);
 
-watch([isSwiping, direction], ([isSwiping, direction]) => {
-  if (isSwiping) {
+      break;
+    case "ArrowUp":
+      moveHandler(onUp);
+
+      break;
+    case "ArrowDown":
+      moveHandler(onDown);
+
+      break;
+  }
+});
+
+useSwipe(boardRef, {
+  onSwipeEnd(e, direction) {
     switch (direction) {
       case "left":
         moveHandler(onLeft);
@@ -149,12 +163,18 @@ const reset = () => {
   items.value = generateInitialBoard();
 };
 
-const { z, r, control } = useMagicKeys();
+onKeyStroke("z", (e) => {
+  if (e.ctrlKey) {
+    e.preventDefault();
 
-watch([z, r, control], ([z, r, ctrl]) => {
-  if (z && ctrl) {
     prevStep();
-  } else if (r && ctrl) {
+  }
+});
+
+onKeyStroke("r", (e) => {
+  if (e.ctrlKey) {
+    e.preventDefault();
+
     reset();
   }
 });
