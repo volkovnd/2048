@@ -162,19 +162,12 @@ const reset = () => {
 
   items.value = generateInitialBoard();
 };
+const { z, r, control } = useMagicKeys();
 
-onKeyStroke("z", (e) => {
-  if (e.ctrlKey) {
-    e.preventDefault();
-
+watch([z, r, control], ([z, r, ctrl]) => {
+  if (z && ctrl) {
     prevStep();
-  }
-});
-
-onKeyStroke("r", (e) => {
-  if (e.ctrlKey) {
-    e.preventDefault();
-
+  } else if (r && ctrl) {
     reset();
   }
 });
