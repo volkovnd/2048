@@ -2,7 +2,7 @@
   <div id="wrapper">
     <AppHeader
       :score="score"
-      :has-possible-steps="hasPossibleSteps"
+      :has-possible-moves="hasPossibleMoves"
       @reset="reset"
     />
     <div
@@ -15,7 +15,7 @@
           :id="`item-${item.id}`"
           :key="item.id"
           :value="item.value"
-          :has-possible-steps="hasPossibleSteps"
+          :has-possible-moves="hasPossibleMoves"
           :position="item.position"
         />
       </ClientOnly>
@@ -66,7 +66,7 @@ const { addToScore, score } = useScore();
 // Обработка передвижений и кнопок клавиатуры / свайпов
 
 // Наличие возможных ходов
-const hasPossibleSteps = computed(() => {
+const hasPossibleMoves = computed(() => {
   // Пока имеется хотя бы одна пустая ячейка, то игра продолжается
   if (items.value.some((item) => item.value === null)) {
     return true;

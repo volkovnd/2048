@@ -1,7 +1,7 @@
 <template>
   <div
     class="board-item"
-    :class="{ 'board-item-disabled': !hasPossibleSteps, 'empty': !value }"
+    :class="{ 'board-item-disabled': !hasPossibleMoves, 'empty': !value }"
     :style="{
       transform: `translateX(${translateX}) translateY(${translateY})`
     }"
@@ -22,7 +22,7 @@ const props = withDefaults(
   defineProps<{
     value: ItemValue;
     position?: ItemPosition;
-    hasPossibleSteps?: boolean;
+    hasPossibleMoves?: boolean;
   }>(),
   {
     position: () => ({ x: 0, y: 0 })
@@ -94,7 +94,7 @@ const textColor = computed(() => {
     0 3px 5px #00000024,
     0 1px 9px #0000001f;
 
-  transition: all 0.2s ease-in-out;
+  transition: transform 0.2s ease-in-out;
 }
 
 .dark-mode .board-item {

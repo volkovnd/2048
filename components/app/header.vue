@@ -8,7 +8,7 @@
 
     <ClientOnly>
       <div
-        v-if="!hasPossibleSteps"
+        v-if="!hasPossibleMoves"
         class="header-col"
       >
         <h3 class="header-title">Игра закончена</h3>
@@ -48,7 +48,7 @@ defineEmits<{
 
 defineProps<{
   score?: number;
-  hasPossibleSteps?: boolean;
+  hasPossibleMoves?: boolean;
 }>();
 </script>
 
