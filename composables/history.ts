@@ -12,22 +12,16 @@ export const useHistory = (items: Ref<ItemDashboard>, score: Ref<number>) => {
     }
   };
 
-  watch(
-    items,
-    () => {
-      history.value.push({
-        items: clone(items.value),
-        score: score.value
-      });
-    },
-    {
-      immediate: true,
-      deep: true
-    }
-  );
+  const addToHistory = () => {
+    history.value.push({
+      items: clone(items.value),
+      score: score.value
+    });
+  };
 
   return {
     history,
-    prevStep
+    prevStep,
+    addToHistory
   };
 };

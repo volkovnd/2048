@@ -94,6 +94,8 @@ const moveHandler = (createResultFn: (cb?: (value: number) => void) => ItemDashb
 
   if (!isEqualBoard(result, items.value)) {
     items.value = addRandomItem(result);
+
+    addToHistory();
   }
 };
 
@@ -153,7 +155,7 @@ useSwipe(boardRef, {
   }
 });
 
-const { prevStep, history } = useHistory(items, score);
+const { prevStep, history, addToHistory } = useHistory(items, score);
 
 const reset = () => {
   history.value = [];
