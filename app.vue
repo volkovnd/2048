@@ -39,8 +39,13 @@
       <h3>Вы проиграли!</h3>
 
       <UiButton
+        label="Шаг назад"
+        @click="onLosePrevStep"
+      />
+
+      <UiButton
         label="Заново"
-        @click="reset"
+        @click="onLoseReset"
       />
     </UiDialog>
   </div>
@@ -222,9 +227,6 @@ const reset = () => {
   score.value = 0;
 
   items.value = generateInitialBoard();
-
-  loseDialogRef.value?.hide();
-  winDialogRef.value?.hide();
 };
 
 onKeyStroke((e) => {
@@ -238,6 +240,18 @@ onKeyStroke((e) => {
     e.preventDefault();
   }
 });
+
+const onLosePrevStep = () => {
+  loseDialogRef.value?.hide();
+
+  prevStep();
+};
+
+const onLoseReset = () => {
+  loseDialogRef.value?.hide();
+
+  reset();
+};
 </script>
 
 <style lang="css">
