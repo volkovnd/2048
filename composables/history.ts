@@ -4,8 +4,8 @@ export const useHistory = (items: Ref<ItemDashboard>, score: Ref<number>) => {
   const history = useSessionStorage<HistoryItem[]>("2048-history", () => []);
 
   const prevStep = () => {
-    if (history.value.length > 1) {
-      const [prevStep] = history.value.splice(history.value.length - 2, 2);
+    if (history.value.length >= 1) {
+      const [prevStep] = history.value.splice(history.value.length - 2, 1);
 
       items.value = prevStep.items;
       score.value = prevStep.score;
