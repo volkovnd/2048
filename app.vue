@@ -2,6 +2,7 @@
   <div id="wrapper">
     <AppHeader
       :score="score"
+      :is-win="isWin"
       :has-possible-moves="hasPossibleMoves"
       @reset="reset"
     />
@@ -47,7 +48,7 @@ const addRandomItem = (items: ItemDashboard) => {
 };
 
 const generateInitialBoard = (): ItemDashboard =>
-  addRandomItem(Array.from({ length: 16 }, () => createItem()));
+  addRandomItem(addRandomItem(Array.from({ length: 16 }, () => createItem())));
 
 const items = useSessionStorage<ItemDashboard>("2048-items", generateInitialBoard());
 
@@ -64,6 +65,10 @@ const computedItems = computed<Item[]>(() =>
 const { addToScore, score } = useScore();
 
 // Обработка передвижений и кнопок клавиатуры / свайпов
+
+const isWin = computed(() =>
+  items.value.some((item) => typeof item.value === "number" && item.value >= 2048)
+);
 
 // Наличие возможных ходов
 const hasPossibleMoves = computed(() => {

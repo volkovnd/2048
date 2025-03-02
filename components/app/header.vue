@@ -7,11 +7,19 @@
     </div>
 
     <ClientOnly>
-      <div
-        v-if="!hasPossibleMoves"
-        class="header-col"
-      >
-        <h3 class="header-title">Игра закончена</h3>
+      <div class="header-col">
+        <h3
+          v-if="isWin"
+          class="header-title"
+        >
+          Вы выиграли!
+        </h3>
+        <h3
+          v-else-if="!hasPossibleMoves"
+          class="header-title"
+        >
+          Игра закончена
+        </h3>
       </div>
     </ClientOnly>
 
@@ -48,6 +56,7 @@ defineEmits<{
 
 defineProps<{
   score?: number;
+  isWin?: boolean;
   hasPossibleMoves?: boolean;
 }>();
 </script>

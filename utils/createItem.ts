@@ -6,3 +6,5 @@ export const createItem = (value: ItemValue = null): Item => ({
   id: _id++,
   value
 });
+
+export const setCreateItemId = (id: number) => (_id = id);
