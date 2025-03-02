@@ -2,8 +2,6 @@
   <div id="wrapper">
     <AppHeader
       :score="score"
-      :is-win="isWin"
-      :has-possible-moves="hasPossibleMoves"
       @reset="reset"
     />
     <div
@@ -16,20 +14,47 @@
           :id="`item-${item.id}`"
           :key="item.id"
           :value="item.value"
-          :has-possible-moves="hasPossibleMoves"
+          :disabled="!hasPossibleMoves && !isWin"
           :position="item.position"
         />
       </ClientOnly>
     </div>
+
+    <UiDialog ref="winDialogRef">
+      <h3>Вы выиграли!</h3>
+
+      <div>
+        <UiButton
+          label="Продолжить играть"
+          @click="() => winDialogRef?.hide()"
+        />
+
+        <UiButton
+          label="Заново"
+          @click="reset"
+        />
+      </div>
+    </UiDialog>
+    <UiDialog ref="loseDialogRef">
+      <h3>Вы проиграли!</h3>
+
+      <UiButton
+        label="Заново"
+        @click="reset"
+      />
+    </UiDialog>
   </div>
-  <div />
 </template>
 
 <script setup lang="ts">
+import { UiDialog } from "#components";
 import type { Item, ItemDashboard } from "@/types";
 
 // Доска и ее элименты
 const boardRef = useTemplateRef("boardRef");
+
+const winDialogRef = useTemplateRef<InstanceType<typeof UiDialog>>("winDialogRef");
+const loseDialogRef = useTemplateRef<InstanceType<typeof UiDialog>>("loseDialogRef");
 
 const addRandomItem = (items: ItemDashboard) => {
   /** В каждом раунде появляется плитка номинала «2» (с вероятностью 90 %) или «4» (с вероятностью 10 %) */
@@ -66,9 +91,24 @@ const { addToScore, score } = useScore();
 
 // Обработка передвижений и кнопок клавиатуры / свайпов
 
+// В переменной хранится выиграл или нет
 const isWin = computed(() =>
   items.value.some((item) => typeof item.value === "number" && item.value >= 2048)
 );
+
+// Когда победа, то показываем модальное окно с поздравлениями
+watch(isWin, (isWin) => {
+  if (isWin) {
+    winDialogRef.value?.show();
+  }
+});
+
+// Избегаем ситуации, когда при запуске игры в памяти сохранилась победа
+onMounted(() => {
+  if (isWin.value) {
+    winDialogRef.value?.show();
+  }
+});
 
 // Наличие возможных ходов
 const hasPossibleMoves = computed(() => {
@@ -92,6 +132,20 @@ const hasPossibleMoves = computed(() => {
   }
 
   return false;
+});
+
+// В случае отсутствия ходов выводим сообщение о проигрыше
+watch(hasPossibleMoves, (hasPossibleMoves) => {
+  if (!hasPossibleMoves && !isWin.value) {
+    loseDialogRef.value?.show();
+  }
+});
+
+// Избегаем ситуации, когда при запуске игры в памяти сохранилась проигрыш
+onMounted(() => {
+  if (!hasPossibleMoves.value && !isWin.value) {
+    loseDialogRef.value?.show();
+  }
 });
 
 const moveHandler = (createResultFn: (cb?: (value: number) => void) => ItemDashboard) => {
@@ -168,6 +222,9 @@ const reset = () => {
   score.value = 0;
 
   items.value = generateInitialBoard();
+
+  loseDialogRef.value?.hide();
+  winDialogRef.value?.hide();
 };
 
 onKeyStroke((e) => {

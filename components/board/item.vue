@@ -1,7 +1,7 @@
 <template>
   <div
     class="board-item"
-    :class="{ 'board-item-disabled': !hasPossibleMoves, 'empty': !value }"
+    :class="{ 'board-item-disabled': disabled, 'empty': !value }"
     :style="{
       transform: `translateX(${translateX}) translateY(${translateY})`
     }"
@@ -22,7 +22,7 @@ const props = withDefaults(
   defineProps<{
     value: ItemValue;
     position?: ItemPosition;
-    hasPossibleMoves?: boolean;
+    disabled?: boolean;
   }>(),
   {
     position: () => ({ x: 0, y: 0 })
