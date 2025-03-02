@@ -26,12 +26,12 @@
       <div>
         <UiButton
           label="Продолжить играть"
-          @click="() => winDialogRef?.hide()"
+          @click="onWinContinuePlay"
         />
 
         <UiButton
           label="Заново"
-          @click="reset"
+          @click="onWinReset"
         />
       </div>
     </UiDialog>
@@ -251,6 +251,16 @@ const onLoseReset = () => {
   loseDialogRef.value?.hide();
 
   reset();
+};
+
+const onWinReset = () => {
+  winDialogRef.value?.hide();
+
+  reset();
+};
+
+const onWinContinuePlay = () => {
+  winDialogRef.value?.hide();
 };
 </script>
 
