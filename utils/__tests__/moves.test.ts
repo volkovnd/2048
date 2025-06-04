@@ -1,5 +1,4 @@
 import { describe, expect, it } from "vitest";
-import { moveItemsLeft } from "../moves";
 
 describe("moveItemsLeft", () => {
   it("test arr", () => {

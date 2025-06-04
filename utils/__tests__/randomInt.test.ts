@@ -1,5 +1,4 @@
 import { describe, expect, it } from "vitest";
-import { randomInt } from "../randomInt";
 
 describe("randomInt", () => {
   it("random number", () => {

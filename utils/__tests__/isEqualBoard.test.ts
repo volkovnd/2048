@@ -1,5 +1,4 @@
 import { describe, expect, it } from "vitest";
-import { isEqualBoard } from "../isEqualBoard";
 import type { ItemDashboard, ItemValue } from "~/types";
 
 const createItemFromValue = (rows: ItemValue[][]): ItemDashboard =>
