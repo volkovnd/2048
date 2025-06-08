@@ -63,7 +63,6 @@ const loseDialogRef = useTemplateRef<InstanceType<typeof UiDialog>>("loseDialogR
 
 const addRandomItem = (items: ItemDashboard) => {
   /** В каждом раунде появляется плитка номинала «2» (с вероятностью 90 %) или «4» (с вероятностью 10 %) */
-
   const result = clone(items);
 
   const emptyItems = result.filter((item) => item.value === null);
@@ -102,18 +101,17 @@ const isWin = computed(() =>
 );
 
 // Когда победа, то показываем модальное окно с поздравлениями
-watch(isWin, (isWin) => {
-  if (isWin) {
-    winDialogRef.value?.show();
+watch(
+  isWin,
+  (isWin) => {
+    if (isWin) {
+      winDialogRef.value?.show();
+    }
+  },
+  {
+    immediate: true
   }
-});
-
-// Избегаем ситуации, когда при запуске игры в памяти сохранилась победа
-onMounted(() => {
-  if (isWin.value) {
-    winDialogRef.value?.show();
-  }
-});
+);
 
 // Наличие возможных ходов
 const hasPossibleMoves = computed(() => {
@@ -140,18 +138,17 @@ const hasPossibleMoves = computed(() => {
 });
 
 // В случае отсутствия ходов выводим сообщение о проигрыше
-watch(hasPossibleMoves, (hasPossibleMoves) => {
-  if (!hasPossibleMoves && !isWin.value) {
-    loseDialogRef.value?.show();
+watch(
+  hasPossibleMoves,
+  (hasPossibleMoves) => {
+    if (!hasPossibleMoves && !isWin.value) {
+      loseDialogRef.value?.show();
+    }
+  },
+  {
+    immediate: true
   }
-});
-
-// Избегаем ситуации, когда при запуске игры в памяти сохранилась проигрыш
-onMounted(() => {
-  if (!hasPossibleMoves.value && !isWin.value) {
-    loseDialogRef.value?.show();
-  }
-});
+);
 
 const moveHandler = (createResultFn: (cb?: (value: number) => void) => ItemDashboard) => {
   const result = createResultFn(addToScore);
