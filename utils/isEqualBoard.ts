@@ -7,9 +7,14 @@ import type { ItemDashboard } from "~/types";
  * @returns True if the boards are equal, false otherwise.
  */
 export const isEqualBoard = (input1: ItemDashboard, input2: ItemDashboard): boolean => {
-  const getOnlyValues = (input: ItemDashboard) => {
-    return input.map((item) => item.value);
-  };
+  if (input1.length !== input2.length) {
+    return false;
+  }
 
-  return JSON.stringify(getOnlyValues(input1)) === JSON.stringify(getOnlyValues(input2));
+  for (let i = 0; i < input1.length; i++) {
+    if (input1[i].value !== input2[i].value) {
+      return false;
+    }
+  }
+  return true;
 };
