@@ -23,15 +23,19 @@ const model = defineModel<boolean>();
 
 const show = () => {
   model.value = true;
-
-  emit("show");
 };
 
 const hide = () => {
   model.value = false;
-
-  emit("hide");
 };
+
+watch(model, (model) => {
+  if (!model) {
+    emit("hide");
+  } else {
+    emit("show");
+  }
+});
 
 defineExpose({
   show,
