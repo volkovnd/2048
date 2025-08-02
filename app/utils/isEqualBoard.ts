@@ -1,5 +1,3 @@
-import type { ItemDashboard } from "~/types";
-
 /**
  * Compares two boards and returns true if they are equal.
  * @param input1 - First board to compare.

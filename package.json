@@ -15,10 +15,8 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "format": "prettier --write .",
-    "lint": "eslint .",
-    "lint:fix": "eslint --fix .",
-    "lint:styles": "stylelint \"**/*.{css,vue}\"",
-    "lint:styles:fix": "stylelint \"**/*.{css,vue}\" --fix"
+    "lint:scripts": "eslint .",
+    "lint:styles": "stylelint \"**/*.{css,vue}\""
   },
   "dependencies": {
     "@mdi/js": "^7.4.47",
@@ -36,15 +34,14 @@
     "@vueuse/nuxt": "^13.3.0",
     "eslint": "^9.19.0",
     "happy-dom": "^16.8.1",
-    "nuxt": "^3.17.5",
+    "nuxt": "^4.0.2",
     "playwright-core": "^1.50.1",
     "postcss-html": "^1.7.0",
     "prettier": "^3.5.1",
     "stylelint": "^16.10.0",
-    "stylelint-config-recess-order": "^6.0.0",
-    "stylelint-config-recommended": "^16.0.0",
+    "stylelint-config-recess-order": "^7.1.0",
+    "stylelint-config-recommended": "^17.0.0",
     "stylelint-config-recommended-vue": "^1.5.0",
-    "vite-plugin-eslint2": "^5.0.2",
     "vitest": "^3.0.4"
   }
 }

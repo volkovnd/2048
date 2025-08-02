@@ -1,4 +1,3 @@
-import type { Item } from "@/types";
 
 const moveEmptyItems = (items: Item[]) => {
   const notEmptyItems = items.filter((item) => item.value !== null);
