@@ -53,7 +53,6 @@
 
 <script setup lang="ts">
 import { UiDialog } from "#components";
-import type { Item, ItemDashboard } from "@/types";
 
 // Доска и ее элименты
 const boardRef = useTemplateRef("boardRef");
@@ -262,8 +261,6 @@ const onWinContinuePlay = () => {
 </script>
 
 <style lang="css">
-@import "normalize.css";
-
 :root {
   --header-height: 4rem;
 

@@ -1,5 +1,3 @@
-import type { ItemColumn, ItemDashboard, ItemRow } from "~/types";
-
 export const transformDashboardToColumns = (items: ItemDashboard) => {
   return Array.from({ length: 4 }, (_v, x) =>
     Array.from({ length: 4 }, (_v, y) => items[getIndexFromXY(x, y)])

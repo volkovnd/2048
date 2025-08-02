@@ -1,5 +1,4 @@
 import { describe, expect, it } from "vitest";
-import type { ItemDashboard, ItemValue } from "~/types";
 
 const createItemFromValue = (rows: ItemValue[][]): ItemDashboard =>
   rows.flat().map((value) => ({ id: 2, value }));

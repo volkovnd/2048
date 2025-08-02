@@ -9,7 +9,7 @@ export type Item = {
   position?: ItemPosition;
 };
 
-export type ItemRow = Item[];
+export type ItemRow =  Item[];
 export type ItemColumn = Item[];
 export type ItemDashboard = Item[];
 

@@ -1,8 +1,15 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  devtools: { enabled: true, telemetry: false },
 
-  telemetry: false,
+  modules: [
+    "@nuxtjs/google-fonts",
+    "@nuxt/eslint",
+    "@nuxtjs/stylelint-module",
+    "@vueuse/nuxt",
+    "@nuxt/test-utils",
+    "@nuxtjs/color-mode"
+  ],
+  devtools: { enabled: true, telemetry: false },
 
   app: {
     head: {
@@ -20,16 +27,24 @@ export default defineNuxtConfig({
     }
   },
 
-  modules: [
-    "@nuxtjs/google-fonts",
-    "@nuxt/eslint",
-    "@nuxtjs/stylelint-module",
-    "@vueuse/nuxt",
-    "@nuxt/test-utils",
-    "@nuxtjs/color-mode"
-  ],
+  css: ['normalize.css'],
 
   spaLoadingTemplate: false,
+
+  compatibilityDate: '2025-08-02',
+  typescript: {
+    strict: true
+  },
+
+  telemetry: false,
+
+  eslint:{
+    config: {
+      nuxt: {
+        sortConfigKeys: true
+      }
+    }
+  },
 
   googleFonts: {
     families: {
@@ -38,12 +53,12 @@ export default defineNuxtConfig({
       }
     },
 
+    download:true,
     display: "swap"
   },
 
-  compatibilityDate: "2025-02-14",
-
-  eslint: {
-    checker: true
-  }
+  stylelint: {
+    lintOnStart: false,
+    cache: false
+  },
 });

@@ -16,8 +16,6 @@
 </template>
 
 <script setup lang="ts">
-import type { ItemValue, ItemPosition } from "~/types";
-
 const props = withDefaults(
   defineProps<{
     value: ItemValue;
