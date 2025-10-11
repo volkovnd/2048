@@ -33,7 +33,7 @@
     "@vueuse/components": "^13.3.0",
     "@vueuse/nuxt": "^13.3.0",
     "eslint": "^9.19.0",
-    "happy-dom": "^16.8.1",
+    "happy-dom": "^20.0.0",
     "nuxt": "^4.0.2",
     "playwright-core": "^1.50.1",
     "postcss-html": "^1.7.0",
